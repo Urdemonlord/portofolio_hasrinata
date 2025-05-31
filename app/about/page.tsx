@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
+import ProgressClient from "@/components/ProgressClient";
 import Link from "next/link";
 import { ArrowRight, Briefcase, GraduationCap, Laptop, User } from "lucide-react";
 
@@ -80,7 +80,7 @@ export default function AboutPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <p>
-                I'm a passionate Full-stack & AI Developer with over 5 years of experience
+                I&apos;m a passionate Full-stack & AI Developer with over 5 years of experience
                 building web applications, mobile solutions, and machine learning systems.
                 My expertise spans across the entire development lifecycle, from conceptualization
                 to deployment and maintenance.
@@ -91,7 +91,7 @@ export default function AboutPage() {
                 excellence with a focus on creating intuitive user experiences.
               </p>
               <p>
-                When I'm not coding, I contribute to open-source projects, write technical
+                When I&apos;m not coding, I contribute to open-source projects, write technical
                 articles, and mentor aspiring developers. I believe in the power of technology
                 to create positive change and am committed to ethical development practices.
               </p>
@@ -185,7 +185,7 @@ export default function AboutPage() {
                     <span>{skill.name}</span>
                     <span className="text-muted-foreground">{skill.proficiency}%</span>
                   </div>
-                  <Progress value={skill.proficiency} className="h-2" />
+                  <ProgressClient value={skill.proficiency} max={100} className="h-2" />
                 </div>
               ))}
             </CardContent>

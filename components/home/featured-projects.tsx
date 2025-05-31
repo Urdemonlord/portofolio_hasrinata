@@ -5,17 +5,18 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ExternalLink, Github, Star } from "lucide-react";
-import { mockProjects } from "@/lib/data/projects";
+import { Project } from "@/lib/types";
 
-export default function FeaturedProjects() {
-  // Display only the 3 featured projects
-  const featuredProjects = mockProjects
-    .filter(project => project.featured)
-    .slice(0, 3);
+interface FeaturedProjectsProps {
+  projects: Project[];
+}
+
+export default function FeaturedProjects({ projects }: FeaturedProjectsProps) {
+  const projectsToDisplay = projects.slice(0, 3);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {featuredProjects.map((project) => (
+      {projectsToDisplay.map((project) => (
         <Card key={project.id} className="flex flex-col h-full transition-all hover:shadow-md">
           <CardHeader className="pb-2">
             <div className="flex justify-between items-start">
@@ -36,16 +37,20 @@ export default function FeaturedProjects() {
             </div>
           </CardContent>
           <CardFooter className="flex justify-between border-t pt-4">
-            <Button asChild variant="ghost" size="sm">
-              <Link href={project.demoUrl} target="_blank" rel="noopener noreferrer">
-                Demo <ExternalLink className="h-3.5 w-3.5 ml-1" />
-              </Link>
-            </Button>
-            <Button asChild size="sm">
-              <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                GitHub <Github className="h-3.5 w-3.5 ml-1" />
-              </Link>
-            </Button>
+            {project.demoUrl && (
+              <Button asChild variant="ghost" size="sm">
+                <Link href={project.demoUrl} target="_blank" rel="noopener noreferrer">
+                  Demo <ExternalLink className="h-3.5 w-3.5 ml-1" />
+                </Link>
+              </Button>
+            )}
+            {project.githubUrl && (
+              <Button asChild size="sm">
+                <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                  GitHub <Github className="h-3.5 w-3.5 ml-1" />
+                </Link>
+              </Button>
+            )}
           </CardFooter>
         </Card>
       ))}

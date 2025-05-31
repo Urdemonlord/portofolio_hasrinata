@@ -4,8 +4,18 @@ import Image from "next/image";
 import { ArrowRight, Award, Github, Laptop } from "lucide-react";
 import RecentCertificates from "@/components/home/recent-certificates";
 import FeaturedProjects from "@/components/home/featured-projects";
+import { getGithubProjects } from "@/lib/github";
+import { Project } from "@/lib/types";
 
-export default function Home() {
+export default async function Home() {
+  let featuredProjects: Project[] = [];
+  try {
+    const allProjects = await getGithubProjects();
+    featuredProjects = allProjects.filter(project => project.featured);
+  } catch (error) {
+    console.error("Error fetching featured GitHub projects:", error);
+  }
+
   return (
     <>
       <section className="relative py-20 md:py-28 overflow-hidden">
@@ -68,7 +78,7 @@ export default function Home() {
               Explore my latest GitHub projects and contributions
             </p>
           </div>
-          <FeaturedProjects />
+          <FeaturedProjects projects={featuredProjects} />
           <div className="mt-8 flex justify-center">
             <Button asChild variant="outline">
               <Link href="/projects">
@@ -87,7 +97,7 @@ export default function Home() {
                 About Me
               </h2>
               <p className="text-muted-foreground">
-                I'm a passionate Full-stack & AI Developer with a focus on creating
+                I&apos;m a passionate Full-stack & AI Developer with a focus on creating
                 elegant solutions to complex problems. My journey in tech is
                 driven by continuous learning and growth.
               </p>
