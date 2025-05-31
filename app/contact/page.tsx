@@ -35,12 +35,12 @@ export default function ContactPage() {
     {
       icon: <Github className="h-5 w-5" />,
       label: "GitHub",
-      href: "https://github.com/hasrinataarya",
+      href: "https://github.com/Urdemonlord",
     },
     {
       icon: <Linkedin className="h-5 w-5" />,
       label: "LinkedIn",
-      href: "https://linkedin.com/in/hasrinataarya",
+      href: "https://linkedin.com/in/hasrinata",
     },
     {
       icon: <Twitter className="h-5 w-5" />,

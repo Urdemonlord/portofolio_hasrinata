@@ -69,7 +69,7 @@ export default function CertificatesFilter() {
           <SlidersHorizontal className="mr-2 h-4 w-4" />
           Filters
           {hasActiveFilters && (
-            <Badge variant="secondary\" className="ml-2 rounded-full h-5 w-5 p-0 flex items-center justify-center">
+            <Badge variant="secondary" className="ml-2 rounded-full h-5 w-5 p-0 flex items-center justify-center">
               {(selectedPlatform ? 1 : 0) + (selectedCategory ? 1 : 0)}
             </Badge>
           )}

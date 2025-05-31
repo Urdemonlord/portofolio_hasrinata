@@ -9,6 +9,7 @@ export interface Certificate {
   credentialId: string;
   verificationUrl: string;
   skills: string[];
+  pdfUrl?: string;
 }
 
 export interface Project {

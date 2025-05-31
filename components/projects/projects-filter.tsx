@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { 
@@ -12,24 +12,36 @@ import {
 } from "@/components/ui/select";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { Badge } from "../ui/badge";
+import { Project } from "@/lib/types";
 
-export default function ProjectsFilter() {
+interface ProjectsFilterProps {
+  allProjects: Project[];
+  searchTerm: string;
+  setSearchTerm: (term: string) => void;
+  selectedTechnology: string;
+  setSelectedTechnology: (tech: string) => void;
+  sortBy: string;
+  setSortBy: (sortBy: string) => void;
+}
+
+export default function ProjectsFilter({ 
+  allProjects,
+  searchTerm,
+  setSearchTerm,
+  selectedTechnology,
+  setSelectedTechnology,
+  sortBy,
+  setSortBy
+}: ProjectsFilterProps) {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedTechnology, setSelectedTechnology] = useState("");
-  const [sortBy, setSortBy] = useState("newest");
   
-  const technologies = [
-    "All Technologies",
-    "React", 
-    "Next.js", 
-    "TypeScript", 
-    "Node.js", 
-    "Python", 
-    "TensorFlow",
-    "Django",
-    "Flutter"
-  ];
+  const technologies = useMemo(() => {
+    const techSet = new Set<string>();
+    allProjects.forEach(project => {
+      project.technologies.forEach(tech => techSet.add(tech));
+    });
+    return ["All Technologies", ...Array.from(techSet).sort()];
+  }, [allProjects]);
   
   const sortOptions = [
     { value: "newest", label: "Newest First" },
@@ -67,8 +79,8 @@ export default function ProjectsFilter() {
           <SlidersHorizontal className="mr-2 h-4 w-4" />
           Filters
           {hasActiveFilters && (
-            <Badge variant="secondary\" className="ml-2 rounded-full h-5 w-5 p-0 flex items-center justify-center">
-              {(selectedTechnology ? 1 : 0) + (sortBy !== "newest" ? 1 : 0)}
+            <Badge variant="secondary" className="ml-2 rounded-full h-5 w-5 p-0 flex items-center justify-center">
+              {(selectedTechnology ? 1 : 0) + (searchTerm ? 1 : 0) + (sortBy !== "newest" ? 1 : 0)}
             </Badge>
           )}
         </Button>
@@ -89,7 +101,7 @@ export default function ProjectsFilter() {
           <div className="space-y-2">
             <label className="text-sm font-medium">Technology</label>
             <Select 
-              value={selectedTechnology} 
+              value={selectedTechnology}
               onValueChange={setSelectedTechnology}
             >
               <SelectTrigger>
@@ -108,7 +120,7 @@ export default function ProjectsFilter() {
           <div className="space-y-2">
             <label className="text-sm font-medium">Sort By</label>
             <Select 
-              value={sortBy} 
+              value={sortBy}
               onValueChange={setSortBy}
             >
               <SelectTrigger>

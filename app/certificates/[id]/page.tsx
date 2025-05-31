@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { ArrowLeft, ExternalLink, FileDown } from "lucide-react";
@@ -8,6 +8,13 @@ import { mockProjects } from "@/lib/data/projects";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import RelatedProjects from "@/components/certificates/related-projects";
+
+// Fungsi ini diperlukan untuk static export
+export async function generateStaticParams() {
+  return mockCertificates.map((certificate) => ({
+    id: certificate.id,
+  }));
+}
 
 export const generateMetadata = ({ params }: { params: { id: string } }) => {
   const certificate = mockCertificates.find((cert) => cert.id === params.id);
@@ -107,20 +114,22 @@ export default function CertificateDetailPage({ params }: { params: { id: string
               </div>
             </div>
             
-            <div className="pt-2 space-y-3">
-              <Button asChild className="w-full">
-                <Link href="#">
-                  <FileDown className="mr-2 h-4 w-4" />
-                  Download Certificate
-                </Link>
-              </Button>
-              <Button asChild variant="outline" className="w-full">
-                <Link href={certificate.verificationUrl} target="_blank" rel="noopener noreferrer">
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                  Verify Certificate
-                </Link>
-              </Button>
-            </div>
+            <CardContent className="flex justify-end gap-4">
+              {certificate.pdfUrl && (
+                <Button asChild variant="outline" size="sm">
+                  <Link href={certificate.pdfUrl} target="_blank" rel="noopener noreferrer">
+                    <FileDown className="h-3.5 w-3.5 mr-1" /> Download Certificate
+                  </Link>
+                </Button>
+              )}
+              {certificate.verificationUrl && (
+                <Button asChild size="sm">
+                  <Link href={certificate.verificationUrl} target="_blank" rel="noopener noreferrer">
+                    View Credential <ExternalLink className="h-3.5 w-3.5 ml-1" />
+                  </Link>
+                </Button>
+              )}
+            </CardContent>
           </Card>
         </div>
       </div>
