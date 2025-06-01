@@ -43,20 +43,21 @@ export default function Header() {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-6 md:gap-10">
           <Link href="/" className="flex items-center space-x-2">
-            <span className="font-bold text-xl">HAA</span>
+            <span className="font-bold text-xl"></span>
           </Link>
           
           <nav className="hidden md:flex gap-6">
-            {navItems.map((item) => (
+            {navItems.map((item, index) => (
               <Link
                 key={item.path}
                 href={item.path}
                 className={cn(
-                  "text-sm font-medium transition-colors hover:text-primary",
+                  "text-sm font-medium transition-all duration-300 hover:text-primary hover:scale-105 animate-slide-in-up",
                   pathname === item.path
                     ? "text-foreground"
                     : "text-muted-foreground"
                 )}
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
                 {item.name}
               </Link>

@@ -11,7 +11,7 @@ interface ProjectsClientContentProps {
 
 export default function ProjectsClientContent({ allProjects }: ProjectsClientContentProps) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedTechnology, setSelectedTechnology] = useState("");
+  const [selectedTechnology, setSelectedTechnology] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
 
   // Since filtering and sorting logic is now in ProjectsList, we just pass the state

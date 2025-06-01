@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import ProgressClient from "@/components/ProgressClient";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, Briefcase, GraduationCap, Laptop, User } from "lucide-react";
 
 export const metadata = {
@@ -13,62 +14,60 @@ export const metadata = {
 export default function AboutPage() {
   // Technical skills with proficiency levels
   const technicalSkills = [
-    { name: "JavaScript/TypeScript", proficiency: 90 },
-    { name: "React & Next.js", proficiency: 85 },
-    { name: "Node.js", proficiency: 80 },
-    { name: "Python", proficiency: 75 },
-    { name: "TensorFlow/PyTorch", proficiency: 70 },
-    { name: "AWS/GCP", proficiency: 65 },
-    { name: "Flutter", proficiency: 60 },
+    { name: "JavaScript/TypeScript", proficiency: 85 },
+    { name: "React & Next.js", proficiency: 80 },
+    { name: "Python", proficiency: 90 },
+    { name: "Machine Learning (scikit-learn, XGBoost)", proficiency: 80 },
+    { name: "NLP (IndoBERT, Transformers)", proficiency: 75 },
+    { name: "SQL & Data Visualization", proficiency: 70 },
+    { name: "AWS / Google Cloud", proficiency: 65 },
   ];
-  
+
   // Career timeline
   const careerTimeline = [
     {
-      title: "Senior Full-stack Developer",
-      company: "Tech Innovators Inc.",
+      title: "Data Scientist & Full-stack Developer (Freelance)",
+      company: "Self-employed / Codex",
       period: "2023 - Present",
-      description: "Leading the development of enterprise web applications using Next.js, Node.js, and cloud technologies.",
+      description:
+        "Built multiple data-driven apps and web platforms using Next.js, Flask, and cloud tools. Focus on prompt engineering, AI integration, and open-source contributions.",
     },
     {
-      title: "AI Developer",
-      company: "DataVision AI",
-      period: "2021 - 2023",
-      description: "Implemented machine learning models for computer vision and natural language processing applications.",
-    },
-    {
-      title: "Frontend Developer",
-      company: "WebSolutions Co.",
-      period: "2019 - 2021",
-      description: "Developed responsive web applications using React and modern JavaScript.",
+      title: "Student Developer & Robotics Enthusiast",
+      company: "Universitas Muhammadiyah Semarang",
+      period: "2022 - Present",
+      description:
+        "Involved in software development, machine learning projects (toxic comment detection, OCR hybrid models), and robotics (Soccerbot control system using Kotlin & Arduino).",
     },
   ];
-  
+
   // Education background
   const education = [
     {
-      degree: "Master of Science in Computer Science",
-      institution: "University of Technology",
-      year: "2019",
-      description: "Specialized in Artificial Intelligence and Machine Learning.",
+      degree: "Bachelor of Informatics Engineering",
+      institution: "Universitas Muhammadiyah Semarang",
+      year: "Expected 2026",
+      description:
+        "Focus on Data Science, Artificial Intelligence, Web Development, and Cloud Computing.",
     },
     {
-      degree: "Bachelor of Science in Information Technology",
-      institution: "National Institute of Technology",
-      year: "2017",
-      description: "Graduated with honors, with a focus on software development.",
+      degree: "Certified Programs & Bootcamps",
+      institution: "Dicoding, Bangkit Academy, Google Cloud, AWS",
+      year: "2023 - 2025",
+      description:
+        "Completed certifications in cloud, AI, machine learning, backend development, and DevOps. Projects include NLP, visual novel games, and decision support systems.",
     },
   ];
-  
+
   return (
-    <div className="container py-10 md:py-16">
+    <div className="container py-10 md:py-16 page-transition">
       <div className="mb-8">
         <h1 className="text-3xl font-bold tracking-tighter">About Me</h1>
         <p className="text-muted-foreground mt-1">
           Learn more about my background, skills, and experience
         </p>
       </div>
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
         <div className="lg:col-span-2 space-y-10">
           <Card>
@@ -80,24 +79,24 @@ export default function AboutPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <p>
-                I&apos;m a passionate Full-stack & AI Developer with over 5 years of experience
-                building web applications, mobile solutions, and machine learning systems.
-                My expertise spans across the entire development lifecycle, from conceptualization
-                to deployment and maintenance.
+                I&apos;m Hasrinata Arya Afendi — a Full-stack & AI Developer with
+                strong interest in web engineering, machine learning, and cloud
+                computing. I build things that solve real problems, with a data-driven
+                and ethical approach.
               </p>
               <p>
-                I enjoy solving complex problems and continuously learning new technologies
-                to stay at the forefront of the industry. My approach combines technical 
-                excellence with a focus on creating intuitive user experiences.
+                I&apos;ve worked on projects like toxic comment detection using
+                IndoBERT and Explainable AI, hybrid OCR systems, decision support
+                systems, and social media apps for campus environments.
               </p>
               <p>
-                When I&apos;m not coding, I contribute to open-source projects, write technical
-                articles, and mentor aspiring developers. I believe in the power of technology
-                to create positive change and am committed to ethical development practices.
+                Outside of coding, I write articles, learn about startup models,
+                and explore robotics. Im focused on building impactful solutions,
+                learning fast, and delivering clean code.
               </p>
             </CardContent>
           </Card>
-          
+
           <div>
             <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
               <Briefcase className="h-5 w-5" />
@@ -105,7 +104,11 @@ export default function AboutPage() {
             </h2>
             <div className="space-y-6">
               {careerTimeline.map((job, index) => (
-                <Card key={index}>
+                <Card 
+                  key={index}
+                  className="card-hover hover-lift animate-slide-in-left"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
                   <CardHeader className="pb-2">
                     <div className="flex justify-between items-start">
                       <div>
@@ -122,7 +125,7 @@ export default function AboutPage() {
               ))}
             </div>
           </div>
-          
+
           <div>
             <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
               <GraduationCap className="h-5 w-5" />
@@ -130,7 +133,11 @@ export default function AboutPage() {
             </h2>
             <div className="space-y-6">
               {education.map((edu, index) => (
-                <Card key={index}>
+                <Card 
+                  key={index}
+                  className="card-hover hover-lift animate-slide-in-left"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
                   <CardHeader className="pb-2">
                     <div className="flex justify-between items-start">
                       <div>
@@ -148,12 +155,18 @@ export default function AboutPage() {
             </div>
           </div>
         </div>
-        
+
         <div className="space-y-6">
           <Card className="overflow-hidden">
-            <div className="aspect-square bg-muted flex items-center justify-center">
-              {/* Profile image would go here in a real implementation */}
-              <User className="h-16 w-16 text-muted-foreground" />
+            <div className="aspect-square bg-muted flex items-center justify-center overflow-hidden">
+              <Image
+                src="/img/orang-ganteng.png"
+                alt="Hasrinata Arya Afendi"
+                width={400}
+                height={400}
+                className="w-full h-full object-cover"
+                priority
+              />
             </div>
             <CardHeader className="pb-2">
               <CardTitle>Hasrinata Arya Afendi</CardTitle>
@@ -162,15 +175,15 @@ export default function AboutPage() {
             <CardContent className="space-y-4">
               <div className="flex flex-col gap-1">
                 <span className="text-muted-foreground text-sm">Location</span>
-                <span>Jakarta, Indonesia</span>
+                <span>Semarang, Indonesia</span>
               </div>
               <div className="flex flex-col gap-1">
                 <span className="text-muted-foreground text-sm">Languages</span>
-                <span>English (Fluent), Indonesian (Native)</span>
+                <span>English (B2), Indonesian (Native)</span>
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -190,7 +203,7 @@ export default function AboutPage() {
               ))}
             </CardContent>
           </Card>
-          
+
           <div className="flex justify-center">
             <Button asChild>
               <Link href="/contact">
