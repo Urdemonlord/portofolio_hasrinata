@@ -14,19 +14,19 @@ export default function ContactPage() {
     {
       icon: <Mail className="h-5 w-5" />,
       label: "Email",
-      value: "hasrinata.arya@example.com",
-      href: "mailto:hasrinata.arya@example.com",
+      value: "hasrinata@gmail.com",
+      href: "mailto:hasrinata@gmail.com",
     },
     {
       icon: <Phone className="h-5 w-5" />,
       label: "Phone",
-      value: "+62 123 456 7890",
-      href: "tel:+621234567890",
+      value: "+62 857 2545 9881",
+      href: "tel:+6285725459881",
     },
     {
       icon: <MapPin className="h-5 w-5" />,
       label: "Location",
-      value: "Jakarta, Indonesia",
+      value: "Semarang, Indonesia",
       href: null,
     },
   ];
@@ -64,7 +64,7 @@ export default function ContactPage() {
             <CardHeader>
               <CardTitle>Send a Message</CardTitle>
               <CardDescription>
-                Fill out the form and I'll get back to you as soon as possible.
+                Fill out the form and I all get back to you as soon as possible.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -131,7 +131,7 @@ export default function ContactPage() {
             </CardHeader>
             <CardContent>
               <p>
-                I'm currently available for freelance projects, consulting work, and
+                Im currently available for freelance projects, consulting work, and
                 full-time opportunities. My typical response time is within 24-48 hours.
               </p>
               <div className="mt-4 p-4 bg-muted rounded-lg">

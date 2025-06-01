@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback, useMemo, memo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { 
@@ -13,40 +13,77 @@ import {
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { Badge } from "../ui/badge";
 
-export default function CertificatesFilter() {
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+interface CertificatesFilterProps {
+  onFilterChange: (filters: { searchTerm: string; platform: string; category: string }) => void;
+  onSortChange: (sortBy: string) => void;
+}
+
+function CertificatesFilter({ onFilterChange, onSortChange }: CertificatesFilterProps) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedPlatform, setSelectedPlatform] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedPlatform, setSelectedPlatform] = useState("all");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [sortBy, setSortBy] = useState("date");
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   
-  const platforms = [
+  // Memoize static data arrays to prevent re-creation on every render
+  const platforms = useMemo(() => [
     "All Platforms",
-    "Coursera", 
-    "Udemy", 
-    "freeCodeCamp", 
-    "Codecademy", 
-    "edX", 
+    "Dicoding",
+    "Oracle",
+    "Cisco",
+    "Microsoft",
     "Google",
-    "Microsoft"
-  ];
+    "AWS",
+    "GitHub",
+    "Coursera",
+    "edX",
+    "Udemy",
+    "Robotics Competition"
+  ], []);
   
-  const categories = [
+  const categories = useMemo(() => [
     "All Categories",
+    "Programming", 
     "Web Development", 
-    "Data Science", 
-    "AI/ML", 
-    "DevOps", 
+    "Frontend Development", 
+    "Backend Development", 
     "Mobile Development", 
-    "Cloud Computing"
-  ];
+    "DevOps", 
+    "Cloud Computing",
+    "Version Control",
+    "Robotics",
+    "Software Engineering"
+  ], []);
   
-  const clearFilters = () => {
+  // Optimize filter clearing with useCallback
+  const clearFilters = useCallback(() => {
     setSearchTerm("");
-    setSelectedPlatform("");
-    setSelectedCategory("");
-  };
+    setSelectedPlatform("all");
+    setSelectedCategory("all");
+  }, []);
   
-  const hasActiveFilters = searchTerm || selectedPlatform || selectedCategory;
+  // Effect to notify parent component of filter changes with debouncing
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      onFilterChange({
+        searchTerm,
+        platform: selectedPlatform || "all",
+        category: selectedCategory || "all"
+      });
+    }, 150); // 150ms debounce
+
+    return () => clearTimeout(timeoutId);
+  }, [searchTerm, selectedPlatform, selectedCategory, onFilterChange]);
+
+  // Effect to notify parent component of sort changes
+  useEffect(() => {
+    onSortChange(sortBy);
+  }, [sortBy, onSortChange]);
+  
+  const hasActiveFilters = useMemo(() => 
+    searchTerm || (selectedPlatform && selectedPlatform !== "all") || (selectedCategory && selectedCategory !== "all"),
+    [searchTerm, selectedPlatform, selectedCategory]
+  );
   
   return (
     <div className="mb-8 space-y-4">
@@ -61,29 +98,41 @@ export default function CertificatesFilter() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <Button 
-          variant="outline" 
-          onClick={() => setIsFilterOpen(!isFilterOpen)}
-          className="sm:w-auto w-full"
-        >
-          <SlidersHorizontal className="mr-2 h-4 w-4" />
-          Filters
-          {hasActiveFilters && (
-            <Badge variant="secondary" className="ml-2 rounded-full h-5 w-5 p-0 flex items-center justify-center">
-              {(selectedPlatform ? 1 : 0) + (selectedCategory ? 1 : 0)}
-            </Badge>
-          )}
-        </Button>
-        {hasActiveFilters && (
+        <div className="flex gap-2">
+          <Select value={sortBy} onValueChange={setSortBy}>
+            <SelectTrigger className="w-40">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="date">Sort by Date</SelectItem>
+              <SelectItem value="title">Sort by Title</SelectItem>
+              <SelectItem value="platform">Sort by Platform</SelectItem>
+            </SelectContent>
+          </Select>
           <Button 
-            variant="ghost" 
-            onClick={clearFilters} 
+            variant="outline" 
+            onClick={() => setIsFilterOpen(!isFilterOpen)}
             className="sm:w-auto w-full"
           >
-            <X className="mr-2 h-4 w-4" />
-            Clear
+            <SlidersHorizontal className="mr-2 h-4 w-4" />
+            Filters
+            {hasActiveFilters && (
+              <Badge variant="secondary" className="ml-2 rounded-full h-5 w-5 p-0 flex items-center justify-center">
+                {(selectedPlatform && selectedPlatform !== "all" ? 1 : 0) + (selectedCategory && selectedCategory !== "all" ? 1 : 0)}
+              </Badge>
+            )}
           </Button>
-        )}
+          {hasActiveFilters && (
+            <Button 
+              variant="ghost" 
+              onClick={clearFilters} 
+              className="sm:w-auto w-full"
+            >
+              <X className="mr-2 h-4 w-4" />
+              Clear
+            </Button>
+          )}
+        </div>
       </div>
       
       {isFilterOpen && (
@@ -99,7 +148,7 @@ export default function CertificatesFilter() {
               </SelectTrigger>
               <SelectContent>
                 {platforms.map((platform) => (
-                  <SelectItem key={platform} value={platform === "All Platforms" ? "" : platform}>
+                  <SelectItem key={platform} value={platform === "All Platforms" ? "all" : platform}>
                     {platform}
                   </SelectItem>
                 ))}
@@ -118,7 +167,7 @@ export default function CertificatesFilter() {
               </SelectTrigger>
               <SelectContent>
                 {categories.map((category) => (
-                  <SelectItem key={category} value={category === "All Categories" ? "" : category}>
+                  <SelectItem key={category} value={category === "All Categories" ? "all" : category}>
                     {category}
                   </SelectItem>
                 ))}
@@ -130,3 +179,5 @@ export default function CertificatesFilter() {
     </div>
   );
 }
+
+export default memo(CertificatesFilter);

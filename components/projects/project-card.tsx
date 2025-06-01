@@ -14,10 +14,8 @@ interface ProjectCardProps {
 }
 
 export default function ProjectCard({ project }: ProjectCardProps) {
-  const [showFullDescription, setShowFullDescription] = useState(false);
-
-  return (
-    <Card className="overflow-hidden transition-all hover:shadow-md">
+  const [showFullDescription, setShowFullDescription] = useState(false);  return (
+    <Card className="overflow-hidden card-hover hover-lift card-entrance">
       <div className="grid grid-cols-1 md:grid-cols-3">
         <div className="aspect-video md:aspect-auto bg-muted flex items-center justify-center">
           <Code className="h-10 w-10 text-muted-foreground" />

@@ -25,7 +25,7 @@ export default function ProjectsList({ allProjects, searchTerm, selectedTechnolo
       );
     }
 
-    if (selectedTechnology) {
+    if (selectedTechnology && selectedTechnology !== "all") {
       filtered = filtered.filter(project =>
         project.technologies.includes(selectedTechnology)
       );
@@ -60,8 +60,14 @@ export default function ProjectsList({ allProjects, searchTerm, selectedTechnolo
       </p>
       
       <div className="space-y-6">
-        {filteredAndSortedProjects.map((project) => (
-          <ProjectCard key={project.id} project={project} />
+        {filteredAndSortedProjects.map((project, index) => (
+          <div 
+            key={project.id}
+            className="animate-slide-in-up"
+            style={{ animationDelay: `${index * 0.1}s` }}
+          >
+            <ProjectCard project={project} />
+          </div>
         ))}
         
         {filteredAndSortedProjects.length === 0 && (

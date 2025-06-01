@@ -122,7 +122,7 @@ export default function CertificateDetailPage({ params }: { params: { id: string
                   </Link>
                 </Button>
               )}
-              {certificate.verificationUrl && (
+              {certificate.verificationUrl && certificate.verificationUrl !== "#" && (
                 <Button asChild size="sm">
                   <Link href={certificate.verificationUrl} target="_blank" rel="noopener noreferrer">
                     View Credential <ExternalLink className="h-3.5 w-3.5 ml-1" />

@@ -14,8 +14,12 @@ export default function RecentCertificates() {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {recentCertificates.map((certificate) => (
-        <Card key={certificate.id} className="flex flex-col h-full transition-all hover:shadow-md">
+      {recentCertificates.map((certificate, index) => (
+        <Card 
+          key={certificate.id} 
+          className="flex flex-col h-full card-hover hover-lift animate-slide-in-up"
+          style={{ animationDelay: `${index * 0.1}s` }}
+        >
           <CardHeader className="pb-2">
             <div className="flex justify-between items-start">
               <Badge variant="outline">{certificate.platform}</Badge>
@@ -28,11 +32,13 @@ export default function RecentCertificates() {
             <p className="text-sm mt-2">Issued: {certificate.date}</p>
           </CardContent>
           <CardFooter className="flex justify-between border-t pt-4">
-            <Button asChild variant="ghost" size="sm">
-              <Link href={certificate.verificationUrl} target="_blank" rel="noopener noreferrer">
-                Verify <ExternalLink className="h-3.5 w-3.5 ml-1" />
-              </Link>
-            </Button>
+            {certificate.verificationUrl && certificate.verificationUrl !== "#" && (
+              <Button asChild variant="ghost" size="sm">
+                <Link href={certificate.verificationUrl} target="_blank" rel="noopener noreferrer">
+                  Verify <ExternalLink className="h-3.5 w-3.5 ml-1" />
+                </Link>
+              </Button>
+            )}
             <Button asChild size="sm">
               <Link href={`/certificates/${certificate.id}`}>
                 View <FileText className="h-3.5 w-3.5 ml-1" />

@@ -22,7 +22,7 @@ export default async function ProjectsPage() {
   ]);
 
   return (
-    <div className="container py-10 md:py-16">
+    <div className="container py-10 md:py-16 page-transition">
       <div className="mb-8">
         <h1 className="text-3xl font-bold tracking-tighter">Projects</h1>
         <p className="text-muted-foreground mt-1">
@@ -43,10 +43,3 @@ export default async function ProjectsPage() {
     </div>
   );
 }
-
-// Remove unused imports and logic
-// import ProjectsList from "@/components/projects/projects-list";
-// import ProjectsFilter from "@/components/projects/projects-filter";
-// interface ProjectsPageProps {
-//   projects: Project[];
-// }

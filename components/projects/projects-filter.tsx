@@ -40,7 +40,7 @@ export default function ProjectsFilter({
     allProjects.forEach(project => {
       project.technologies.forEach(tech => techSet.add(tech));
     });
-    return ["All Technologies", ...Array.from(techSet).sort()];
+    return ["all", ...Array.from(techSet).sort()];
   }, [allProjects]);
   
   const sortOptions = [
@@ -52,11 +52,11 @@ export default function ProjectsFilter({
   
   const clearFilters = () => {
     setSearchTerm("");
-    setSelectedTechnology("");
+    setSelectedTechnology("all");
     setSortBy("newest");
   };
   
-  const hasActiveFilters = searchTerm || selectedTechnology || sortBy !== "newest";
+  const hasActiveFilters = searchTerm || (selectedTechnology && selectedTechnology !== "all") || sortBy !== "newest";
   
   return (
     <div className="mb-8 space-y-4">
@@ -80,7 +80,7 @@ export default function ProjectsFilter({
           Filters
           {hasActiveFilters && (
             <Badge variant="secondary" className="ml-2 rounded-full h-5 w-5 p-0 flex items-center justify-center">
-              {(selectedTechnology ? 1 : 0) + (searchTerm ? 1 : 0) + (sortBy !== "newest" ? 1 : 0)}
+              {(selectedTechnology && selectedTechnology !== "all" ? 1 : 0) + (searchTerm ? 1 : 0) + (sortBy !== "newest" ? 1 : 0)}
             </Badge>
           )}
         </Button>
@@ -109,8 +109,8 @@ export default function ProjectsFilter({
               </SelectTrigger>
               <SelectContent>
                 {technologies.map((tech) => (
-                  <SelectItem key={tech} value={tech === "All Technologies" ? "" : tech}>
-                    {tech}
+                  <SelectItem key={tech} value={tech}>
+                    {tech === "all" ? "All Technologies" : tech}
                   </SelectItem>
                 ))}
               </SelectContent>
