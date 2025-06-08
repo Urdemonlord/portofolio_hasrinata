@@ -2,8 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import { writeFile, readFile } from 'fs/promises';
 import { join } from 'path';
 import { existsSync, mkdirSync } from 'fs';
+import { verifyAuth, createUnauthorizedResponse } from '@/lib/auth-utils';
 
 export async function POST(request: NextRequest) {
+  // Check authentication
+  const isAuthenticated = await verifyAuth(request);
+  if (!isAuthenticated) {
+    return createUnauthorizedResponse();
+  }
+
   try {
     const formData = await request.formData();
     const certificateData = JSON.parse(formData.get('certificate') as string);

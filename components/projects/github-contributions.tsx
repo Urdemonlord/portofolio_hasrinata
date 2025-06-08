@@ -23,9 +23,13 @@ export function GitHubContributions({ contributionData }: GitHubContributionsPro
     recentCommits: [],
   };
   
-  // Find the max commits for scaling
-  const maxCommits = data.commitsByMonth.length > 0 
-    ? Math.max(...data.commitsByMonth.map(m => m.commits))
+  // Ensure commitsByMonth is always an array to prevent runtime errors
+  const commitsByMonth = data.commitsByMonth || [];
+  const recentCommits = data.recentCommits || [];
+  
+  // Find the max commits for scaling with additional safety checks
+  const maxCommits = commitsByMonth.length > 0 
+    ? Math.max(...commitsByMonth.map(m => m?.commits || 0))
     : 1;
   
   return (
@@ -65,15 +69,15 @@ export function GitHubContributions({ contributionData }: GitHubContributionsPro
           
           <div className="pt-2">
             <p className="text-sm font-medium mb-3">Commits (Last 6 Months)</p>
-            {data.commitsByMonth.length > 0 ? (
+            {commitsByMonth.length > 0 ? (
               <div className="space-y-2">
-                {data.commitsByMonth.map((month) => (
+                {commitsByMonth.map((month) => (
                   <div key={month.month} className="space-y-1">
                     <div className="flex justify-between text-xs">
                       <span>{month.month}</span>
-                      <span className="text-muted-foreground">{month.commits} commits</span>
+                      <span className="text-muted-foreground">{month.commits || 0} commits</span>
                     </div>
-                    <Progress value={(month.commits / maxCommits) * 100} className="h-2" />
+                    <Progress value={((month.commits || 0) / maxCommits) * 100} className="h-2" />
                   </div>
                 ))}
               </div>
@@ -97,16 +101,16 @@ export function GitHubContributions({ contributionData }: GitHubContributionsPro
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {data.recentCommits.length > 0 ? (
-              data.recentCommits.map((commit, i) => (
+            {recentCommits.length > 0 ? (
+              recentCommits.map((commit, i) => (
                 <div key={commit.sha || i} className="flex gap-3">
                   <GitCommit className="h-4 w-4 text-muted-foreground mt-0.5" />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium line-clamp-2">
-                      {commit.message}
+                      {commit.message || 'No message'}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {commit.repo} • {commit.date}
+                      {commit.repo || 'Unknown repo'} • {commit.date || 'Unknown date'}
                     </p>
                   </div>
                 </div>

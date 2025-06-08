@@ -26,77 +26,40 @@ export interface GitHubContributionData {
   }>;
 }
 
-// Konfigurasi featured projects
-let FEATURED_PROJECTS = [
-  'portfolio-website',
-  'portofolio_hasrinata', 
-  'ai-chatbot',
-  'data-analytics-dashboard',
-  'e-commerce-platform',
-  'mobile-app'
-];
-
-// Function to load featured projects from config file
-async function loadFeaturedProjects(): Promise<string[]> {
-  try {
-    if (typeof window === 'undefined') {
-      // Server-side: read from config file
-      const { readFile } = await import('fs/promises');
-      const { join } = await import('path');
-      const configPath = join(process.cwd(), 'lib', 'featured-projects-config.json');
-      const configData = await readFile(configPath, 'utf-8');
-      const config = JSON.parse(configData);
-      return config.featuredProjects || FEATURED_PROJECTS;
-    } else {
-      // Client-side: fetch from API
-      const response = await fetch('/api/admin/featured-projects');
-      if (response.ok) {
-        const config = await response.json();
-        return config.featuredProjects || FEATURED_PROJECTS;
-      }
-    }
-  } catch (error) {
-    console.warn('⚠️ Failed to load featured projects config, using defaults:', error);
-  }
-  return FEATURED_PROJECTS;
-}
-
 async function getReadmeContent(username: string, repoName: string, token?: string): Promise<string | null> {
   try {
     const url = `https://api.github.com/repos/${username}/${repoName}/readme`;
-    const headers: Record<string, string> = {
-      'Accept': 'application/vnd.github.v3+json',
-      'User-Agent': 'Portfolio-Website/1.0'
+    const headers: Record<string, string> = token ? {
+      Authorization: `token ${token}`,
+      'Accept': 'application/vnd.github.v3.raw'
+    } : {
+      'Accept': 'application/vnd.github.v3.raw'
     };
-    
-    if (token) {
-      headers['Authorization'] = `token ${token}`;
-    }
 
     console.log(`📖 Fetching README for ${repoName}...`);
-    const response = await fetchWithRetry<any>(url, { headers });
+    const response = await fetchWithRetry<Response>(url, { headers });
     
-    if (!response || !response.content) {
+    if (!response || !response.ok) {
       console.warn(`⚠️ No README found for ${repoName}`);
       return null;
     }
 
-    // Decode base64 content
-    const readmeText = Buffer.from(response.content, 'base64').toString('utf-8');
+    const readmeText = await response.text();
     console.log(`✅ README found for ${repoName}, length: ${readmeText.length}`);
 
     if (!readmeText || readmeText.trim().length === 0) {
       console.warn(`⚠️ Empty README for ${repoName}`);
       return null;
-    }    // Better extraction: find meaningful description
+    }
+
+    // Better extraction: find meaningful description
     const lines = readmeText.split('\n').filter((line: string) => line.trim() !== '');
     
     // Skip initial title lines and find the first descriptive paragraph
     let foundDescription = '';
-    let skipNext = false;
     
-    for (let i = 0; i < lines.length; i++) {
-      const trimmed = lines[i].trim();
+    for (const line of lines) {
+      const trimmed = line.trim();
       
       // Skip empty lines, headers, badges, and other metadata
       if (!trimmed || 
@@ -111,28 +74,14 @@ async function getReadmeContent(username: string, repoName: string, token?: stri
           trimmed.startsWith('>') ||
           trimmed.toLowerCase().includes('license') ||
           trimmed.toLowerCase().includes('installation') ||
-          trimmed.toLowerCase().includes('requirements') ||
           trimmed.toLowerCase().includes('usage') ||
-          trimmed.toLowerCase().includes('getting started') ||
-          trimmed.toLowerCase().includes('table of contents') ||
-          trimmed.toLowerCase().includes('features:') ||
-          trimmed.toLowerCase().includes('technologies:') ||
-          trimmed.toLowerCase().startsWith('made with') ||
-          trimmed.toLowerCase().startsWith('built with')) {
+          trimmed.toLowerCase().includes('getting started')) {
         continue;
       }
       
-      // Found a meaningful line - check if it's descriptive enough
-      if (trimmed.length > 30 && !trimmed.match(/^[A-Z][a-z\s]+$/)) {
+      // Found a meaningful line
+      if (trimmed.length > 20) {
         foundDescription = trimmed;
-        
-        // Try to get the next sentence too if it's continuation
-        if (i + 1 < lines.length && !foundDescription.endsWith('.') && !foundDescription.endsWith('!') && !foundDescription.endsWith('?')) {
-          const nextLine = lines[i + 1].trim();
-          if (nextLine && nextLine.length > 10 && !nextLine.startsWith('#') && !nextLine.startsWith('[')) {
-            foundDescription += ' ' + nextLine;
-          }
-        }
         break;
       }
     }
@@ -184,10 +133,6 @@ export async function getGithubProjects(): Promise<Project[]> {
   console.log('🔍 Fetching GitHub projects with enhanced retry mechanism...');
   
   try {
-    // Load featured projects configuration
-    const featuredProjectsConfig = await loadFeaturedProjects();
-    console.log('📌 Loaded featured projects config:', featuredProjectsConfig);
-    
     // Use enhanced fetch function with retry mechanism
     const repos = await fetchGitHubRepositories();
     
@@ -220,20 +165,19 @@ export async function getGithubProjects(): Promise<Project[]> {
       
       console.log(`🔍 Processing repository: ${repo.name}`);
       console.log(`📝 Original description: "${description}"`);
-        // Try to get README content for better descriptions
+      
+      // Try to get README content for better descriptions
       try {
         const readmeContent = await getReadmeContent(username, repo.name, token);
         if (readmeContent && readmeContent.trim().length > 0) {
-          // Prioritas ke README content jika tersedia dan lebih baik
+          // Use README content if it's longer or if original description is empty/generic
           if (!description || 
-              description.length < 30 || 
-              readmeContent.length > description.length ||
+              description.length < 20 || 
+              readmeContent.length > description.length * 1.5 ||
               description.toLowerCase().includes('no description') ||
-              description.toLowerCase().includes('add description') ||
-              description.toLowerCase().includes('created by') ||
-              description === `A ${repo.language || 'software'} project`) {
+              description.toLowerCase().includes('add description')) {
             description = readmeContent;
-            console.log(`✅ Using README description for ${repo.name}: "${description.substring(0, 150)}..."`);
+            console.log(`✅ Using README description for ${repo.name}: "${description.substring(0, 100)}..."`);
           } else {
             console.log(`📝 Keeping original description for ${repo.name}: "${description}"`);
           }
@@ -252,16 +196,14 @@ export async function getGithubProjects(): Promise<Project[]> {
       
       // Format description
       description = formatRepoDescription(description);
-      console.log(`🎯 Final description for ${repo.name}: "${description}"`);      // Extract technologies
+      console.log(`🎯 Final description for ${repo.name}: "${description}"`);
+
+      // Extract technologies
       const technologies = extractTechnologies(repo);
 
-      // Determine if featured - menggunakan konfigurasi manual dan skor
+      // Determine if featured
       const score = calculateProjectScore(repo);
-      const isManuallyFeatured = featuredProjectsConfig.includes(repo.name);
-      const isHighScore = score > 100;
-      const isFeatured = isManuallyFeatured || isHighScore;
-
-      console.log(`🎯 Project ${repo.name}: Score=${score}, ManuallyFeatured=${isManuallyFeatured}, Featured=${isFeatured}`);
+      const isFeatured = score > 100;
 
       return {
         id: repo.id.toString(),

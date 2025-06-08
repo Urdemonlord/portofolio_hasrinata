@@ -1,12 +1,7 @@
-// Remove 'use client';
-
-// Remove state imports
-// import { useState, useMemo } from "react";
-
 import ProjectsClientContent from "@/components/projects/projects-client-content"; // Import the new client component
 import { GitHubContributions } from "@/components/projects/github-contributions"; // Keep GitHubContributions if needed
 import { Project } from "@/lib/types"; // Import Project type
-import { getGithubProjects, getGithubContributions } from "@/lib/github"; // Import the github utilities (Server side)
+import { getOptimizedGithubProjects, getOptimizedGithubActivity } from "@/lib/github-optimized"; // Import the github utilities (Server side)
 
 // Re-add metadata export
 export const metadata = {
@@ -17,8 +12,8 @@ export const metadata = {
 // Make the page component async again to fetch data
 export default async function ProjectsPage() {
   const [allProjects, contributionData] = await Promise.all([
-    getGithubProjects(), // Fetch all projects on the server
-    getGithubContributions() // Fetch GitHub contributions data
+    getOptimizedGithubProjects(), // Fetch all projects on the server
+    getOptimizedGithubActivity() // Fetch GitHub activity data
   ]);
 
   return (
