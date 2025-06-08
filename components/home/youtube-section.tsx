@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Play, ExternalLink, Youtube } from "lucide-react";
@@ -42,14 +43,16 @@ export default function YouTubeSection() {
 
         <Card className="max-w-4xl mx-auto overflow-hidden group hover:shadow-xl transition-all duration-500">
           <CardContent className="p-0">
-            <div className="relative aspect-video bg-black rounded-lg overflow-hidden">
-              {!isPlaying ? (
+            <div className="relative aspect-video bg-black rounded-lg overflow-hidden">              {!isPlaying ? (
                 // Thumbnail with play button
                 <div className="relative w-full h-full">
-                  <img
+                  <Image
                     src={featuredVideo.thumbnail}
                     alt={featuredVideo.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+                    priority
                   />
                   <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
                     <Button

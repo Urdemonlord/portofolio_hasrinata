@@ -2,8 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import { readFile, writeFile, unlink } from 'fs/promises';
 import { join } from 'path';
 import { existsSync } from 'fs';
+import { verifyAuth, createUnauthorizedResponse } from '@/lib/auth-utils';
 
 export async function DELETE(request: NextRequest) {
+  // Check authentication
+  const isAuthenticated = await verifyAuth(request);
+  if (!isAuthenticated) {
+    return createUnauthorizedResponse();
+  }
+
   try {
     const { id } = await request.json();
 

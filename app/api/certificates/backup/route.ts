@@ -1,8 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
+import { verifyAuth, createUnauthorizedResponse } from '@/lib/auth-utils';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  // Check authentication
+  const isAuthenticated = await verifyAuth(request);
+  if (!isAuthenticated) {
+    return createUnauthorizedResponse();
+  }
+
   try {
     // Read current certificates data
     const certificatesPath = join(process.cwd(), 'lib', 'data', 'certificates.ts');

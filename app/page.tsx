@@ -3,18 +3,20 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Award, Github, Laptop } from "lucide-react";
 import RecentCertificates from "@/components/home/recent-certificates";
-import FeaturedProjects from "@/components/home/featured-projects";
+import FeaturedProjectsClient from "@/components/home/featured-projects-client";
 import YouTubeSection from "@/components/home/youtube-section";
-import { getGithubProjects } from "@/lib/github";
+import { getOptimizedGithubProjects } from "@/lib/github-optimized";
 import { Project } from "@/lib/types";
 
 export default async function Home() {
   let featuredProjects: Project[] = [];
   try {
-    const allProjects = await getGithubProjects();
+    const allProjects = await getOptimizedGithubProjects();
     featuredProjects = allProjects.filter(project => project.featured);
   } catch (error) {
     console.error("Error fetching featured GitHub projects:", error);
+    // Provide static fallback to prevent hydration issues
+    featuredProjects = [];
   }
 
   return (
@@ -79,7 +81,7 @@ export default async function Home() {
               Explore my latest GitHub projects and contributions
             </p>
           </div>
-          <FeaturedProjects projects={featuredProjects} />
+          <FeaturedProjectsClient initialProjects={featuredProjects} />
           <div className="mt-8 flex justify-center animate-slide-in-up" style={{ animationDelay: "0.3s" }}>
             <Button asChild variant="outline">
               <Link href="/projects">

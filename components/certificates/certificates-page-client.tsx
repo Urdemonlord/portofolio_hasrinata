@@ -1,13 +1,12 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
-import Link from "next/link";
 import CertificatesFilter from "./certificates-filter";
 import CertificatesList from "./certificates-list";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Award, Building, Calendar, Settings } from "lucide-react";
+import { Award, Building, Calendar } from "lucide-react";
 import { mockCertificates } from "@/lib/data/certificates";
+import { AdminButton } from "@/components/admin/admin-button";
 
 // Add sorting functionality
 export default function CertificatesPageClient() {
@@ -43,14 +42,7 @@ export default function CertificatesPageClient() {
   }, []);  return (
     <div className="container py-10 md:py-16 relative page-transition">
       {/* Floating Admin Button */}
-      <Link href="/admin/certificates">
-        <Button
-          size="icon"
-          className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 bg-primary hover:bg-primary/90 animate-float"
-        >
-          <Settings className="h-6 w-6" />
-        </Button>
-      </Link>
+      <AdminButton />
 
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
         <div>
