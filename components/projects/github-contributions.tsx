@@ -1,126 +1,187 @@
 "use client";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowUpRight, GitCommit, Github, GitPullRequest } from "lucide-react";
+import { GitBranch, GitCommit, Calendar, TrendingUp, Github, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
-import { GitHubContributionData } from "@/lib/github";
+
+interface ContributionData {
+  totalCommits: number;
+  recentCommits: Array<{
+    message: string;
+    repo: string;
+    date: string;
+    sha: string;
+  }>;
+  commitsByMonth: Array<{
+    month: string;
+    commits: number;
+  }>;
+  recentCommitsCount: number;
+  repositories: number;
+  lastActivity: string | null;
+}
 
 interface GitHubContributionsProps {
-  contributionData?: GitHubContributionData;
+  contributionData?: ContributionData;
 }
 
 export function GitHubContributions({ contributionData }: GitHubContributionsProps) {
-  // Use provided data or fallback to mock data
+  // Safe data access with fallbacks
   const data = contributionData || {
-    totalContributions: 0,
-    currentStreak: 0,
-    longestStreak: 0,
-    pullRequests: 0,
-    issues: 0,
-    commitsByMonth: [],
+    totalCommits: 0,
     recentCommits: [],
+    commitsByMonth: [],
+    recentCommitsCount: 0,
+    repositories: 0,
+    lastActivity: null
   };
-  
-  // Ensure commitsByMonth is always an array to prevent runtime errors
-  const commitsByMonth = data.commitsByMonth || [];
-  const recentCommits = data.recentCommits || [];
-  
-  // Find the max commits for scaling with additional safety checks
+
+  const commitsByMonth = data?.commitsByMonth || [];
+  const recentCommits = data?.recentCommits || [];
+  const totalCommits = data?.totalCommits || 0;
+  const recentCommitsCount = data?.recentCommitsCount || 0;
+  const repositories = data?.repositories || 0;
+
+  // Find the max commits for scaling
   const maxCommits = commitsByMonth.length > 0 
     ? Math.max(...commitsByMonth.map(m => m?.commits || 0))
     : 1;
+
+  const formatDate = (dateString: string) => {
+    try {
+      return new Date(dateString).toLocaleDateString('en', { 
+        month: 'short', 
+        day: 'numeric' 
+      });
+    } catch {
+      return 'Unknown date';
+    }
+  };
   
   return (
     <div className="space-y-6">
+      {/* Statistics Cards */}
+      <div className="grid grid-cols-2 gap-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Commits</CardTitle>
+            <GitCommit className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{totalCommits.toLocaleString()}</div>
+            <p className="text-xs text-muted-foreground">All time</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">This Month</CardTitle>
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{recentCommitsCount}</div>
+            <p className="text-xs text-muted-foreground">Last 30 days</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Repositories</CardTitle>
+            <GitBranch className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{repositories}</div>
+            <p className="text-xs text-muted-foreground">Active repos</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Recent Activity</CardTitle>
+            <Calendar className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{recentCommits.length}</div>
+            <p className="text-xs text-muted-foreground">Recent commits</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Commit Activity Chart */}
       <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="flex items-center gap-2">
-            <Github className="h-5 w-5" />
-            GitHub Activity
-          </CardTitle>
-          <CardDescription>
-            Summary of my GitHub contributions
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <p className="text-xs text-muted-foreground">Total Contributions</p>
-              <p className="text-2xl font-bold">{data.totalContributions}</p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-xs text-muted-foreground">Current Streak</p>
-              <p className="text-2xl font-bold">{data.currentStreak} days</p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-xs text-muted-foreground">Pull Requests</p>
-              <div className="flex items-center gap-1">
-                <GitPullRequest className="h-4 w-4 text-primary" />
-                <p className="text-lg font-semibold">{data.pullRequests}</p>
-              </div>
-            </div>
-            <div className="space-y-1">
-              <p className="text-xs text-muted-foreground">Longest Streak</p>
-              <p className="text-lg font-semibold">{data.longestStreak} days</p>
-            </div>
-          </div>
-          
-          <div className="pt-2">
-            <p className="text-sm font-medium mb-3">Commits (Last 6 Months)</p>
-            {commitsByMonth.length > 0 ? (
-              <div className="space-y-2">
-                {commitsByMonth.map((month) => (
-                  <div key={month.month} className="space-y-1">
-                    <div className="flex justify-between text-xs">
-                      <span>{month.month}</span>
-                      <span className="text-muted-foreground">{month.commits || 0} commits</span>
-                    </div>
-                    <Progress value={((month.commits || 0) / maxCommits) * 100} className="h-2" />
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-sm text-muted-foreground">No commit data available</p>
-            )}
-          </div>
-          
-          <Button asChild variant="outline" className="w-full mt-4">
-            <Link href="https://github.com/Urdemonlord" target="_blank" rel="noopener noreferrer">
-              View GitHub Profile
-              <ArrowUpRight className="h-3.5 w-3.5 ml-1" />
-            </Link>
-          </Button>
-        </CardContent>
-      </Card>
-      
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-base">Recent Commits</CardTitle>
+        <CardHeader>
+          <CardTitle>Commit Activity</CardTitle>
+          <CardDescription>Commits over the last 6 months</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
+            {commitsByMonth.map((month, index) => (
+              <div key={index} className="flex items-center gap-4">
+                <div className="w-12 text-sm font-medium">{month.month}</div>
+                <div className="flex-1 bg-muted rounded-full h-2 relative overflow-hidden">
+                  <div 
+                    className="bg-blue-600 h-full transition-all duration-500 ease-out"
+                    style={{ 
+                      width: `${maxCommits > 0 ? (month.commits / maxCommits) * 100 : 0}%` 
+                    }}
+                  />
+                </div>
+                <div className="w-8 text-sm text-muted-foreground text-right">
+                  {month.commits}
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Recent Commits */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Recent Commits</CardTitle>
+          <CardDescription>Latest development activity</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
             {recentCommits.length > 0 ? (
-              recentCommits.map((commit, i) => (
-                <div key={commit.sha || i} className="flex gap-3">
-                  <GitCommit className="h-4 w-4 text-muted-foreground mt-0.5" />
+              recentCommits.slice(0, 5).map((commit, index) => (
+                <div key={index} className="flex items-start gap-3 p-3 rounded-lg bg-muted/50">
+                  <GitCommit className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium line-clamp-2">
-                      {commit.message || 'No message'}
+                    <p className="text-sm font-medium truncate">
+                      {commit.message}
                     </p>
-                    <p className="text-xs text-muted-foreground">
-                      {commit.repo || 'Unknown repo'} • {commit.date || 'Unknown date'}
-                    </p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <Badge variant="outline" className="text-xs">
+                        {commit.repo?.split('/')[1] || commit.repo}
+                      </Badge>
+                      <span className="text-xs text-muted-foreground">
+                        {formatDate(commit.date)}
+                      </span>
+                    </div>
                   </div>
                 </div>
               ))
             ) : (
-              <p className="text-sm text-muted-foreground">No recent commits available</p>
+              <div className="text-center py-8 text-muted-foreground">
+                <GitCommit className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                <p>No recent commits found</p>
+              </div>
             )}
           </div>
         </CardContent>
       </Card>
+
+      {/* GitHub Profile Link */}
+      <Button asChild variant="outline" className="w-full">
+        <Link href="https://github.com/Urdemonlord" target="_blank" rel="noopener noreferrer">
+          <Github className="h-4 w-4 mr-2" />
+          View GitHub Profile
+          <ArrowUpRight className="h-4 w-4 ml-2" />
+        </Link>
+      </Button>
     </div>
   );
 }

@@ -151,28 +151,102 @@ export async function getOptimizedGithubProjects(): Promise<Project[]> {
 
 export async function getOptimizedGithubActivity(): Promise<any> {
   return cachedFetch('github-activity', async () => {
-    const username = process.env.GITHUB_USERNAME || 'Urdemonlord';
-    const response = await silentFetch(
-      `https://api.github.com/users/${username}/events/public?per_page=30`
-    );
-    
-    if (!response.ok) {
-      return { commits: 0, repositories: 0, activities: [] };
+    try {
+      const username = process.env.GITHUB_USERNAME || 'Urdemonlord';
+      const response = await silentFetch(
+        `https://api.github.com/users/${username}/events/public?per_page=100`
+      );
+      
+      if (!response.ok) {
+        return getDefaultActivityData();
+      }
+      
+      const events = await response.json();
+      
+      // Filter push events untuk commit data
+      const pushEvents = events.filter((event: any) => event.type === 'PushEvent');
+      
+      // Calculate commits by month for the last 6 months
+      const now = new Date();
+      const sixMonthsAgo = new Date();
+      sixMonthsAgo.setMonth(now.getMonth() - 6);
+      
+      const commitsByMonth = Array.from({ length: 6 }, (_, i) => {
+        const date = new Date();
+        date.setMonth(now.getMonth() - i);
+        const monthName = date.toLocaleDateString('en', { month: 'short' });
+        
+        // Count commits for this month
+        const commitsThisMonth = pushEvents
+          .filter((event: any) => {
+            const eventDate = new Date(event.created_at);
+            return eventDate.getMonth() === date.getMonth() && 
+                   eventDate.getFullYear() === date.getFullYear();
+          })
+          .reduce((total: number, event: any) => 
+            total + (event.payload?.commits?.length || 0), 0
+          );
+        
+        return {
+          month: monthName,
+          commits: commitsThisMonth
+        };
+      }).reverse();
+
+      // Get recent commits (last 10)
+      const recentCommits = pushEvents
+        .slice(0, 10)
+        .flatMap((event: any) => 
+          (event.payload?.commits || []).map((commit: any) => ({
+            message: commit.message || 'No commit message',
+            repo: event.repo?.name || 'Unknown repository',
+            date: event.created_at || new Date().toISOString(),
+            sha: commit.sha || 'unknown'
+          }))
+        )
+        .slice(0, 10);
+
+      // Calculate total commits in last 30 days
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(now.getDate() - 30);
+      
+      const recentCommitsCount = pushEvents
+        .filter((event: any) => new Date(event.created_at) > thirtyDaysAgo)
+        .reduce((total: number, event: any) => 
+          total + (event.payload?.commits?.length || 0), 0
+        );
+
+      return {
+        totalCommits: pushEvents.reduce((total: number, event: any) => 
+          total + (event.payload?.commits?.length || 0), 0
+        ),
+        recentCommits: recentCommits,
+        commitsByMonth: commitsByMonth,
+        recentCommitsCount: recentCommitsCount,
+        repositories: new Set(events.map((event: any) => event.repo?.name)).size,
+        lastActivity: events.length > 0 ? events[0].created_at : null
+      };
+    } catch (error) {
+      console.error('GitHub activity fetch failed:', error);
+      return getDefaultActivityData();
     }
-    
-    const events = await response.json();
-    const pushEvents = events.filter((event: any) => event.type === 'PushEvent');
-    
-    return {
-      commits: pushEvents.reduce((total: number, event: any) => 
-        total + (event.payload?.commits?.length || 0), 0
-      ),
-      repositories: new Set(events.map((event: any) => event.repo?.name)).size,
-      activities: events.slice(0, 5).map((event: any) => ({
-        type: event.type,
-        repo: event.repo?.name,
-        created_at: event.created_at,
-      })),
-    };
   });
+}
+
+function getDefaultActivityData() {
+  return {
+    totalCommits: 0,
+    recentCommits: [],
+    commitsByMonth: Array.from({ length: 6 }, (_, i) => {
+      const date = new Date();
+      date.setMonth(date.getMonth() - i);
+      return {
+        month: date.toLocaleDateString('en', { month: 'short' }),
+        commits: 0
+      };
+    }).reverse(),
+    recentCommitsCount: 0,
+    repositories: 0,
+    lastActivity: null
+  };
 }
