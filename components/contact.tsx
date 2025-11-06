@@ -1,3 +1,5 @@
+"use client"
+
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -34,7 +36,7 @@ export function Contact() {
                   </div>
                   <div>
                     <p className="font-medium text-foreground">Email</p>
-                    <p className="text-muted-foreground">hasrinata.arya@email.com</p>
+                    <a href="mailto:hasrinata@gmail.com" className="text-muted-foreground hover:text-primary transition-colors">hasrinata@gmail.com</a>
                   </div>
                 </div>
 
@@ -44,7 +46,7 @@ export function Contact() {
                   </div>
                   <div>
                     <p className="font-medium text-foreground">Phone</p>
-                    <p className="text-muted-foreground">+62 812-3456-7890</p>
+                    <a href="tel:+6285725459881" className="text-muted-foreground hover:text-primary transition-colors">+62 857-2545-9881</a>
                   </div>
                 </div>
 
@@ -66,6 +68,7 @@ export function Contact() {
                     variant="outline"
                     size="icon"
                     className="hover:bg-primary/10 hover:border-primary bg-transparent"
+                    onClick={() => window.open('https://github.com/Urdemonlord', '_blank')}
                   >
                     <Github className="h-4 w-4" />
                   </Button>
@@ -73,6 +76,7 @@ export function Contact() {
                     variant="outline"
                     size="icon"
                     className="hover:bg-primary/10 hover:border-primary bg-transparent"
+                    onClick={() => window.open('https://linkedin.com/in/hasrinata', '_blank')}
                   >
                     <Linkedin className="h-4 w-4" />
                   </Button>
@@ -80,6 +84,7 @@ export function Contact() {
                     variant="outline"
                     size="icon"
                     className="hover:bg-primary/10 hover:border-primary bg-transparent"
+                    onClick={() => window.location.href = 'mailto:hasrinata@gmail.com'}
                   >
                     <Mail className="h-4 w-4" />
                   </Button>

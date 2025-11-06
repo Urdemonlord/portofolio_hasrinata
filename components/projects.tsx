@@ -1,150 +1,203 @@
-import { Card, CardContent } from "@/components/ui/card"
+"use client"
+
+import { useState, useEffect } from "react"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { ExternalLink, Github } from "lucide-react"
 
-const projects = [
-  {
-    title: "AI-Powered Learning Assistant",
-    description:
-      "Sistem pembelajaran adaptif menggunakan machine learning untuk memberikan rekomendasi materi yang dipersonalisasi berdasarkan gaya belajar siswa.",
-    image: "/placeholder-tgej3.png",
-    technologies: ["Python", "TensorFlow", "React", "FastAPI", "PostgreSQL"],
-    category: "AI/ML",
-    github: "#",
-    demo: "#",
-  },
-  {
-    title: "Smart Campus IoT System",
-    description:
-      "Sistem monitoring kampus pintar dengan sensor IoT untuk mengukur kualitas udara, suhu, dan occupancy ruangan. Dashboard real-time untuk admin kampus.",
-    image: "/placeholder-425f1.png",
-    technologies: ["ESP32", "React", "Node.js", "MQTT", "InfluxDB"],
-    category: "IoT",
-    github: "#",
-    demo: "#",
-  },
-  {
-    title: "E-Commerce Platform",
-    description:
-      "Platform e-commerce full-stack dengan fitur payment gateway, inventory management, dan analytics dashboard. Dioptimalkan untuk performa tinggi.",
-    image: "/modern-ecommerce-interface.png",
-    technologies: ["Next.js", "TypeScript", "Prisma", "Stripe", "Vercel"],
-    category: "Web",
-    github: "#",
-    demo: "#",
-  },
-  {
-    title: "Computer Vision Object Detection",
-    description:
-      "Aplikasi deteksi objek real-time menggunakan YOLO dan OpenCV. Dapat mendeteksi dan mengklasifikasi berbagai objek dengan akurasi tinggi.",
-    image: "/placeholder-8qxob.png",
-    technologies: ["Python", "OpenCV", "YOLO", "PyTorch", "Streamlit"],
-    category: "AI/ML",
-    github: "#",
-    demo: "#",
-  },
-  {
-    title: "Task Management App",
-    description:
-      "Aplikasi manajemen tugas dengan fitur kolaborasi tim, real-time updates, dan integrasi kalender. UI/UX yang intuitif dan responsive.",
-    image: "/task-management-app.png",
-    technologies: ["React", "Node.js", "Socket.io", "MongoDB", "Tailwind"],
-    category: "Web",
-    github: "#",
-    demo: "#",
-  },
-  {
-    title: "Weather Monitoring Station",
-    description:
-      "Stasiun cuaca otomatis dengan sensor multiple dan transmisi data wireless. Data tersimpan di cloud dengan visualisasi grafik historis.",
-    image: "/placeholder-a417o.png",
-    technologies: ["Arduino", "ESP8266", "Firebase", "React", "Chart.js"],
-    category: "IoT",
-    github: "#",
-    demo: "#",
-  },
-]
-
-const categories = ["All", "AI/ML", "Web", "IoT"]
+interface Project {
+  id: string
+  title: string
+  description: string
+  image: string
+  tags: string[]
+  key_features: string[]
+  github_url: string | null
+  website_url: string
+  ai_summary: string
+}
 
 export function Projects() {
+  const [projects, setProjects] = useState<Project[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        setLoading(true)
+        const response = await fetch('https://show-case-it-05.vercel.app/api/projects')
+        if (!response.ok) {
+          throw new Error('Failed to fetch projects')
+        }
+        const data = await response.json()
+        setProjects(data)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchProjects()
+  }, [])
+
+  if (loading) {
+    return (
+      <section id="projects" className="py-20 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center">
+            <p className="text-muted-foreground">Loading projects...</p>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  if (error) {
+    return (
+      <section id="projects" className="py-20 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center">
+            <p className="text-red-500">Error: {error}</p>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
   return (
-    <section id="projects" className="py-20 px-6 bg-card/50">
-      <div className="max-w-6xl mx-auto">
+    <section id="projects" className="py-20 px-6 relative">
+      {/* Background Effects */}
+      <div className="absolute inset-0 cyber-grid opacity-10"></div>
+
+      <div className="max-w-6xl mx-auto relative z-10">
         <div className="space-y-12">
-          <div className="text-center space-y-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground">Featured Projects</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              A showcase of my best work across AI, web development, and IoT
-            </p>
-            <div className="w-20 h-1 bg-primary rounded-full mx-auto"></div>
+          <div className="space-y-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground">Work</h2>
+            <div className="w-20 h-1 bg-primary rounded-full neon-border"></div>
           </div>
 
-          <div className="flex justify-center gap-2 flex-wrap">
-            {categories.map((category) => (
-              <Button
-                key={category}
-                variant="outline"
-                size="sm"
-                className="border-primary/30 text-primary hover:bg-primary/10 bg-transparent"
-              >
-                {category}
-              </Button>
-            ))}
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="space-y-16">
             {projects.map((project, index) => (
-              <Card
-                key={index}
-                className="border-border bg-card hover:bg-card/80 transition-all duration-300 group overflow-hidden"
+              <div
+                key={project.id}
+                className="group animate-fade-in-up"
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="aspect-video overflow-hidden">
-                  <img
-                    src={project.image || "/placeholder.svg"}
-                    alt={project.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-                <CardContent className="p-6 space-y-4">
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <Badge variant="secondary" className="bg-primary/10 text-primary">
-                        {project.category}
-                      </Badge>
+                <div className="grid lg:grid-cols-2 gap-8 items-start">
+                  {/* Project Image */}
+                  <div className={`relative overflow-hidden rounded-xl border-2 border-primary/20 group-hover:border-primary/50 transition-all duration-300 ${
+                    index % 2 === 0 ? 'lg:order-1' : 'lg:order-2'
+                  }`}>
+                    <div className="aspect-video bg-muted relative overflow-hidden">
+                      <img
+                        src={project.image || "/placeholder.svg"}
+                        alt={project.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      {/* Overlay on hover */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-8">
+                        <div className="flex gap-4">
+                          {project.github_url && (
+                            <a
+                              href={project.github_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-12 h-12 rounded-full bg-primary/20 backdrop-blur-sm border border-primary/30 flex items-center justify-center hover:bg-primary/30 transition-all duration-300 neon-border"
+                            >
+                              <Github className="h-5 w-5 text-primary" />
+                            </a>
+                          )}
+                          <a
+                            href={project.website_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-12 h-12 rounded-full bg-primary/20 backdrop-blur-sm border border-primary/30 flex items-center justify-center hover:bg-primary/30 transition-all duration-300 neon-border"
+                          >
+                            <ExternalLink className="h-5 w-5 text-primary" />
+                          </a>
+                        </div>
+                      </div>
                     </div>
-                    <h3 className="text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
-                      {project.title}
-                    </h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed">{project.description}</p>
                   </div>
 
-                  <div className="flex flex-wrap gap-1">
-                    {project.technologies.slice(0, 3).map((tech, techIndex) => (
-                      <Badge key={techIndex} variant="outline" className="text-xs border-border text-muted-foreground">
-                        {tech}
-                      </Badge>
-                    ))}
-                    {project.technologies.length > 3 && (
-                      <Badge variant="outline" className="text-xs border-border text-muted-foreground">
-                        +{project.technologies.length - 3}
-                      </Badge>
+                  {/* Project Info */}
+                  <div className={`space-y-6 ${
+                    index % 2 === 0 ? 'lg:order-2' : 'lg:order-1'
+                  }`}>
+                    <div className="space-y-3">
+                      <h3 className="text-2xl md:text-3xl font-bold text-foreground group-hover:text-primary transition-colors">
+                        {project.title}
+                      </h3>
+                      <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+                        {project.ai_summary || project.description}
+                      </p>
+                    </div>
+
+                    {project.key_features && project.key_features.length > 0 && (
+                      <div className="space-y-3">
+                        <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider">
+                          Key Features
+                        </h4>
+                        <ul className="space-y-2">
+                          {project.key_features.map((feature, idx) => (
+                            <li key={idx} className="flex items-start gap-3 text-sm text-muted-foreground">
+                              <span className="text-primary mt-1 flex-shrink-0">▸</span>
+                              <span>{feature}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     )}
-                  </div>
 
-                  <div className="flex gap-2 pt-2">
-                    <Button size="sm" variant="outline" className="flex-1 bg-transparent">
-                      <Github className="h-4 w-4 mr-2" />
-                      Code
-                    </Button>
-                    <Button size="sm" className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90">
-                      <ExternalLink className="h-4 w-4 mr-2" />
-                      Demo
-                    </Button>
+                    <div className="space-y-3">
+                      <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider">
+                        Technologies
+                      </h4>
+                      <div className="flex flex-wrap gap-2">
+                        {project.tags.map((tech, techIndex) => (
+                          <Badge
+                            key={techIndex}
+                            variant="secondary"
+                            className="text-xs bg-primary/10 text-primary border-primary/30 hover:bg-primary/20 transition-colors"
+                          >
+                            {tech}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Links for mobile */}
+                    <div className="flex gap-4 lg:hidden">
+                      {project.github_url && (
+                        <a
+                          href={project.github_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 border border-primary/30 text-primary hover:bg-primary/20 transition-all duration-300 text-sm font-medium"
+                        >
+                          <Github className="h-4 w-4" />
+                          Code
+                        </a>
+                      )}
+                      <a
+                        href={project.website_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300 text-sm font-medium"
+                      >
+                        <ExternalLink className="h-4 w-4" />
+                        Visit Site
+                      </a>
+                    </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+
+                {/* Divider */}
+                {index < projects.length - 1 && (
+                  <div className="mt-16 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
+                )}
+              </div>
             ))}
           </div>
         </div>

@@ -1,42 +1,53 @@
+"use client"
+
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 
 const experiences = [
   {
-    period: "2024 — Present",
-    title: "AI Research Assistant",
-    company: "Universitas Informatika",
+    period: "2023 — Present",
+    title: "Founder & CEO",
+    company: "MeowLabs",
     description:
-      "Mengembangkan model machine learning untuk analisis data akademik dan sistem rekomendasi pembelajaran. Berkolaborasi dengan tim peneliti dalam proyek AI untuk pendidikan.",
-    technologies: ["Python", "TensorFlow", "Pandas", "Jupyter"],
+      "Memimpin MeowLabs sebagai digital-tech agency & product studio yang mengembangkan website, aplikasi, AI tools, dan produk digital kreatif. Mengelola sub-brand termasuk MeowLabs Store, MeowLabs Chat, MeowStack, dan MeowLabs AI dengan fokus pada identitas visual futuristik.",
+    technologies: ["Next.js", "Supabase", "Docker", "Google Cloud", "Product Management", "Business Strategy"],
+    icon: "�",
+  },
+  {
+    period: "2023 — Present",
+    title: "Full-Stack Developer & ML Engineer",
+    company: "Various Projects",
+    description:
+      "Mengembangkan SIMPUS (Sistem Informasi Puskesmas) terintegrasi BPJS & SATUSEHAT, e-commerce NajStore, dan IoT pest-detector SATRIA. Menangani sentiment analysis IndoBERT, chatbot persona, dan dataset labeling pipeline dengan fokus solusi lokal Indonesia.",
+    technologies: ["Python", "TensorFlow", "React", "Node.js", "ESP32", "TinyML"],
     icon: "🤖",
   },
   {
-    period: "2023 — 2024",
-    title: "Full-Stack Developer Intern",
-    company: "Tech Startup Local",
+    period: "2024 — Present",
+    title: "SaaS Product Developer",
+    company: "KosAtlas & MeowStack",
     description:
-      "Membangun aplikasi web menggunakan React dan Node.js. Mengimplementasikan fitur real-time chat dan sistem notifikasi. Meningkatkan performa aplikasi hingga 40%.",
-    technologies: ["React", "Node.js", "MongoDB", "Socket.io"],
-    icon: "💻",
+      "Mengembangkan KosAtlas sebagai SaaS untuk manajemen kos di Semarang dan MeowStack sebagai platform pembantu developer. Menangani pricing strategy, proposal klien, dan model monetisasi untuk pasar Indonesia.",
+    technologies: ["Next.js", "Supabase", "Vercel", "React", "PostgreSQL"],
+    icon: "🏢",
   },
   {
-    period: "2023",
-    title: "IoT Developer",
-    company: "Smart Home Project",
+    period: "2022 — Present",
+    title: "Game & Web Ecosystem Developer",
+    company: "Roblox & Web Ecosystem",
     description:
-      "Merancang dan mengembangkan sistem smart home menggunakan ESP32 dan sensor IoT. Membuat dashboard web untuk monitoring dan kontrol perangkat secara real-time.",
-    technologies: ["ESP32", "Arduino", "MQTT", "React", "Firebase"],
-    icon: "🏠",
+      "Mengembangkan berbagai proyek di Roblox game ecosystem dan web infrastructure. Berpengalaman dengan React Native/Expo untuk mobile development dan integrasi dengan berbagai platform digital.",
+    technologies: ["Roblox", "React Native", "Expo", "JavaScript", "Web APIs"],
+    icon: "�",
   },
   {
-    period: "2022 — 2023",
-    title: "Web Developer Freelance",
-    company: "Various Clients",
+    period: "2022 — Present",
+    title: "Student & Researcher",
+    company: "Universitas Muhammadiyah Semarang (UNIMUS)",
     description:
-      "Mengembangkan website untuk UMKM dan startup lokal. Fokus pada responsive design dan SEO optimization. Berhasil meningkatkan traffic client hingga 200%.",
-    technologies: ["HTML", "CSS", "JavaScript", "WordPress", "PHP"],
-    icon: "🌐",
+      "Mahasiswa S1 Teknik Informatika (angkatan 2022) dengan fokus pada AI, IoT, dan pengembangan produk digital. Aktif meneliti dan mengimplementasikan solusi teknologi yang relevan dengan kebutuhan lokal.",
+    technologies: ["Python", "Machine Learning", "IoT", "Docker", "Google Cloud"],
+    icon: "�",
   },
 ]
 
