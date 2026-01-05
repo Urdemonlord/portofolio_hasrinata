@@ -132,17 +132,15 @@ export function Hero() {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-8 animate-fade-in-up">
             <div className="space-y-6">
-              <p className="text-muted-foreground text-lg uppercase tracking-wider">Hi, I'm</p>
+              <p className="text-muted-foreground text-lg uppercase tracking-wider">Hasrinata Arya Afendi</p>
               <h1 className="text-5xl md:text-7xl font-bold text-foreground leading-tight relative">
                 <span className="relative inline-block">
-                  Hasrinata
+                  Full-Stack Developer
                   <div className="absolute -inset-1 bg-primary/20 blur-xl rounded-lg -z-10"></div>
                 </span>
               </h1>
               <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-2xl">
-                I build{" "}
-                <span className="text-primary font-semibold">seamless digital experiences</span>{" "}
-                across mobile and web
+                Mengembangkan aplikasi web dan mobile dengan fokus pada solusi praktis untuk kebutuhan lokal
               </p>
             </div>
 
@@ -204,7 +202,9 @@ export function Hero() {
 
                   {/* Center Icon */}
                   <div className="relative z-10">
-                    <div className="text-9xl filter drop-shadow-2xl floating-animation">💻</div>
+                    <div className="w-32 h-32 rounded-2xl bg-primary/20 border-2 border-primary/30 flex items-center justify-center text-6xl font-bold text-primary floating-animation">
+                      &lt;/&gt;
+                    </div>
                   </div>
                 </div>
               </div>
@@ -214,25 +214,25 @@ export function Hero() {
                 className="absolute -top-8 -right-8 w-20 h-20 bg-primary/20 rounded-2xl flex items-center justify-center glass-effect floating-animation neon-border rotate-12"
                 style={{ animationDelay: "1s" }}
               >
-                <span className="text-3xl">⚛️</span>
+                <span className="text-lg font-bold text-primary">JS</span>
               </div>
               <div
                 className="absolute -bottom-8 -left-8 w-20 h-20 bg-accent/20 rounded-2xl flex items-center justify-center glass-effect floating-animation neon-border -rotate-12"
                 style={{ animationDelay: "2s" }}
               >
-                <span className="text-3xl">🤖</span>
+                <span className="text-lg font-bold text-primary">AI</span>
               </div>
               <div
                 className="absolute top-1/2 -left-12 w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center glass-effect floating-animation neon-border rotate-45"
                 style={{ animationDelay: "0.5s" }}
               >
-                <span className="text-2xl">⚡</span>
+                <span className="text-sm font-bold text-primary">DB</span>
               </div>
               <div
                 className="absolute top-1/4 -right-12 w-16 h-16 bg-accent/20 rounded-2xl flex items-center justify-center glass-effect floating-animation neon-border -rotate-45"
                 style={{ animationDelay: "1.5s" }}
               >
-                <span className="text-2xl">🚀</span>
+                <span className="text-sm font-bold text-primary">IoT</span>
               </div>
             </div>
           </div>

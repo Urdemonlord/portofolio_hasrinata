@@ -46,7 +46,7 @@ export function Projects() {
       <section id="projects" className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center">
-            <p className="text-muted-foreground">Loading projects...</p>
+            <p className="text-muted-foreground">Memuat proyek...</p>
           </div>
         </div>
       </section>
@@ -58,7 +58,7 @@ export function Projects() {
       <section id="projects" className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center">
-            <p className="text-red-500">Error: {error}</p>
+            <p className="text-red-500">Gagal memuat data: {error}</p>
           </div>
         </div>
       </section>
@@ -73,7 +73,7 @@ export function Projects() {
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="space-y-12">
           <div className="space-y-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground">Work</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground">Proyek</h2>
             <div className="w-20 h-1 bg-primary rounded-full neon-border"></div>
           </div>
 
@@ -137,7 +137,7 @@ export function Projects() {
                     {project.key_features && project.key_features.length > 0 && (
                       <div className="space-y-3">
                         <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider">
-                          Key Features
+                          Fitur Utama
                         </h4>
                         <ul className="space-y-2">
                           {project.key_features.map((feature, idx) => (
@@ -152,7 +152,7 @@ export function Projects() {
 
                     <div className="space-y-3">
                       <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider">
-                        Technologies
+                        Teknologi
                       </h4>
                       <div className="flex flex-wrap gap-2">
                         {project.tags.map((tech, techIndex) => (

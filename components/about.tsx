@@ -6,25 +6,25 @@ export function About() {
       <div className="max-w-4xl mx-auto">
         <div className="space-y-8">
           <div className="space-y-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground">About</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground">Tentang Saya</h2>
             <div className="w-20 h-1 bg-primary rounded-full"></div>
           </div>
 
           <div className="space-y-6">
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Hasrinata Arya Afendi (Arya) adalah mahasiswa S1 Teknik Informatika di Universitas Muhammadiyah Semarang (UNIMUS, angkatan 2022) yang aktif sebagai founder MeowLabs, sebuah digital-tech agency & product studio yang mengembangkan layanan pembuatan website, aplikasi, AI tools, dan produk digital kreatif. Ia juga sedang membangun berbagai sub-brand seperti MeowLabs Store, MeowLabs Chat, MeowStack, dan MeowLabs AI dengan fokus pada identitas visual kuat (maskot kucing cyber, warna neon futuristik, dll).
+              Saya mahasiswa Teknik Informatika di Universitas Muhammadiyah Semarang (angkatan 2022) yang berfokus pada pengembangan aplikasi web dan mobile. Saat ini mengelola MeowLabs sebagai digital agency yang mengerjakan berbagai project untuk klien lokal.
             </p>
 
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Arya banyak mengerjakan proyek software lintas bidang, mulai dari Roblox game ecosystem, e-commerce top-up (NajStore), SIMPUS (Sistem Informasi Puskesmas) terintegrasi BPJS & SATUSEHAT, IoT pest-detector SATRIA (audio + TinyML), KosAtlas (SaaS kos Semarang), hingga berbagai AI project seperti sentiment analysis IndoBERT, chatbot persona, dan dataset labeling pipeline. Ia menguasai stack modern seperti Next.js, Supabase, Vercel, Docker, Google Cloud, Python ML, IoT (ESP32, TinyML), dan React Native/Expo.
+              Pengalaman saya meliputi pengembangan sistem informasi kesehatan (SIMPUS) terintegrasi BPJS dan SATUSEHAT, platform e-commerce, aplikasi IoT untuk deteksi hama, serta berbagai project machine learning seperti sentiment analysis dan chatbot.
             </p>
 
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Selain teknis, ia juga punya minat bisnis dan strategi—sering menghitung pricing, membuat proposal ke klien, dan memikirkan model monetisasi SaaS di pasar Indonesia (UMKM, mahasiswa, lokal Semarang). Ia aktif membangun personal branding melalui GitHub, LinkedIn, domain pribadi, dan aset digital MeowLabs.
+              Saya bekerja dengan teknologi seperti Next.js, React, Python, TensorFlow, Supabase, dan IoT (ESP32). Selain coding, saya juga menangani aspek bisnis seperti pricing, proposal klien, dan strategi produk untuk pasar lokal Indonesia.
             </p>
 
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Arya bercita-cita menjadi AI Engineer & founder startup yang menggabungkan teknologi AI, produk digital, dan solusi berbasis kebutuhan lokal Indonesia.
+              Target saya adalah membangun karir sebagai AI Engineer dan mengembangkan produk digital yang relevan dengan kebutuhan lokal.
             </p>
           </div>
         </div>

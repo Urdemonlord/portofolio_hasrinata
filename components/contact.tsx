@@ -12,9 +12,9 @@ export function Contact() {
       <div className="max-w-6xl mx-auto">
         <div className="space-y-12">
           <div className="text-center space-y-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground">Get In Touch</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground">Kontak</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Interested in collaborating or have a project in mind? I'd love to hear from you!
+              Untuk diskusi project, kolaborasi, atau pertanyaan lainnya, silakan hubungi saya melalui kontak di bawah ini.
             </p>
             <div className="w-20 h-1 bg-primary rounded-full mx-auto"></div>
           </div>
@@ -22,10 +22,9 @@ export function Contact() {
           <div className="grid lg:grid-cols-2 gap-12">
             <div className="space-y-8">
               <div className="space-y-6">
-                <h3 className="text-2xl font-semibold text-foreground">Let's Connect</h3>
+                <h3 className="text-2xl font-semibold text-foreground">Hubungi Saya</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  Saya selalu terbuka untuk diskusi tentang proyek baru, peluang kolaborasi, atau sekadar berbagi ide
-                  tentang teknologi. Jangan ragu untuk menghubungi saya!
+                  Saya terbuka untuk diskusi mengenai project baru, kolaborasi, atau konsultasi terkait pengembangan aplikasi web dan mobile.
                 </p>
               </div>
 
@@ -55,14 +54,14 @@ export function Contact() {
                     <MapPin className="h-5 w-5 text-primary" />
                   </div>
                   <div>
-                    <p className="font-medium text-foreground">Location</p>
+                    <p className="font-medium text-foreground">Lokasi</p>
                     <p className="text-muted-foreground">Indonesia</p>
                   </div>
                 </div>
               </div>
 
               <div className="space-y-4">
-                <h4 className="text-lg font-semibold text-foreground">Follow Me</h4>
+                <h4 className="text-lg font-semibold text-foreground">Media Sosial</h4>
                 <div className="flex gap-4">
                   <Button
                     variant="outline"
@@ -104,30 +103,30 @@ export function Contact() {
                     <label className="text-sm font-medium text-foreground">Email</label>
                     <Input
                       type="email"
-                      placeholder="your.email@example.com"
+                      placeholder="email@example.com"
                       className="bg-background border-border focus:border-primary"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground">Subject</label>
+                    <label className="text-sm font-medium text-foreground">Subjek</label>
                     <Input
-                      placeholder="Project collaboration"
+                      placeholder="Subjek pesan"
                       className="bg-background border-border focus:border-primary"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground">Message</label>
+                    <label className="text-sm font-medium text-foreground">Pesan</label>
                     <Textarea
-                      placeholder="Tell me about your project or idea..."
+                      placeholder="Tulis pesan Anda di sini..."
                       rows={5}
                       className="bg-background border-border focus:border-primary resize-none"
                     />
                   </div>
 
                   <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
-                    Send Message
+                    Kirim Pesan
                   </Button>
                 </form>
               </CardContent>
@@ -138,8 +137,8 @@ export function Contact() {
 
       <footer className="mt-20 pt-8 border-t border-border">
         <div className="text-center space-y-4">
-          <p className="text-muted-foreground">© 2024 Hasrinata Arya Afendi. All rights reserved.</p>
-          <p className="text-sm text-muted-foreground">Built with Next.js, Tailwind CSS, and lots of ☕</p>
+          <p className="text-muted-foreground">2024 Hasrinata Arya Afendi</p>
+          <p className="text-sm text-muted-foreground">Dibangun dengan Next.js dan Tailwind CSS</p>
         </div>
       </footer>
     </section>

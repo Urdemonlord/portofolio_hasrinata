@@ -5,49 +5,36 @@ import { Badge } from "@/components/ui/badge"
 
 const experiences = [
   {
-    period: "2023 — Present",
-    title: "Founder & CEO",
+    period: "2023 — Sekarang",
+    title: "Founder",
     company: "MeowLabs",
     description:
-      "Memimpin MeowLabs sebagai digital-tech agency & product studio yang mengembangkan website, aplikasi, AI tools, dan produk digital kreatif. Mengelola sub-brand termasuk MeowLabs Store, MeowLabs Chat, MeowStack, dan MeowLabs AI dengan fokus pada identitas visual futuristik.",
-    technologies: ["Next.js", "Supabase", "Docker", "Google Cloud", "Product Management", "Business Strategy"],
-    icon: "�",
+      "Membangun MeowLabs sebagai digital agency yang mengembangkan website, aplikasi mobile, dan produk digital. Mengelola sub-brand seperti MeowLabs Store, MeowLabs Chat, dan MeowStack.",
+    technologies: ["Next.js", "Supabase", "Docker", "Google Cloud", "Product Management"],
   },
   {
-    period: "2023 — Present",
-    title: "Full-Stack Developer & ML Engineer",
-    company: "Various Projects",
+    period: "2023 — Sekarang",
+    title: "Full-Stack Developer",
+    company: "Freelance & Project-Based",
     description:
-      "Mengembangkan SIMPUS (Sistem Informasi Puskesmas) terintegrasi BPJS & SATUSEHAT, e-commerce NajStore, dan IoT pest-detector SATRIA. Menangani sentiment analysis IndoBERT, chatbot persona, dan dataset labeling pipeline dengan fokus solusi lokal Indonesia.",
+      "Mengembangkan SIMPUS (Sistem Informasi Puskesmas) terintegrasi BPJS dan SATUSEHAT, platform e-commerce NajStore, serta IoT pest-detector SATRIA. Mengerjakan sentiment analysis dengan IndoBERT dan chatbot untuk berbagai klien.",
     technologies: ["Python", "TensorFlow", "React", "Node.js", "ESP32", "TinyML"],
-    icon: "🤖",
   },
   {
-    period: "2024 — Present",
-    title: "SaaS Product Developer",
+    period: "2024 — Sekarang",
+    title: "Product Developer",
     company: "KosAtlas & MeowStack",
     description:
-      "Mengembangkan KosAtlas sebagai SaaS untuk manajemen kos di Semarang dan MeowStack sebagai platform pembantu developer. Menangani pricing strategy, proposal klien, dan model monetisasi untuk pasar Indonesia.",
+      "Mengembangkan KosAtlas sebagai platform manajemen kos di Semarang dan MeowStack sebagai tools untuk developer. Menangani pricing, proposal klien, dan strategi monetisasi.",
     technologies: ["Next.js", "Supabase", "Vercel", "React", "PostgreSQL"],
-    icon: "🏢",
   },
   {
-    period: "2022 — Present",
-    title: "Game & Web Ecosystem Developer",
-    company: "Roblox & Web Ecosystem",
+    period: "2022 — Sekarang",
+    title: "Mahasiswa Teknik Informatika",
+    company: "Universitas Muhammadiyah Semarang",
     description:
-      "Mengembangkan berbagai proyek di Roblox game ecosystem dan web infrastructure. Berpengalaman dengan React Native/Expo untuk mobile development dan integrasi dengan berbagai platform digital.",
-    technologies: ["Roblox", "React Native", "Expo", "JavaScript", "Web APIs"],
-    icon: "�",
-  },
-  {
-    period: "2022 — Present",
-    title: "Student & Researcher",
-    company: "Universitas Muhammadiyah Semarang (UNIMUS)",
-    description:
-      "Mahasiswa S1 Teknik Informatika (angkatan 2022) dengan fokus pada AI, IoT, dan pengembangan produk digital. Aktif meneliti dan mengimplementasikan solusi teknologi yang relevan dengan kebutuhan lokal.",
-    technologies: ["Python", "Machine Learning", "IoT", "Docker", "Google Cloud"],
-    icon: "�",
+      "Angkatan 2022 dengan fokus pada AI, IoT, dan pengembangan produk digital. Mengerjakan berbagai project termasuk Roblox game ecosystem dan aplikasi mobile dengan React Native.",
+    technologies: ["Python", "Machine Learning", "IoT", "React Native", "Expo"],
   },
 ]
 
@@ -59,13 +46,10 @@ export function Experience() {
       <div className="max-w-5xl mx-auto relative z-10">
         <div className="space-y-16">
           <div className="text-center space-y-6">
-            <h2 className="text-4xl md:text-6xl font-bold text-foreground animate-fade-in-up">Experience</h2>
-            <p className="text-xl text-muted-foreground animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-              My journey through various roles and projects
-            </p>
+            <h2 className="text-4xl md:text-6xl font-bold text-foreground animate-fade-in-up">Pengalaman</h2>
             <div
               className="w-24 h-1 bg-gradient-to-r from-primary to-primary/50 rounded-full mx-auto animate-fade-in-up"
-              style={{ animationDelay: "0.4s" }}
+              style={{ animationDelay: "0.2s" }}
             ></div>
           </div>
 
@@ -96,12 +80,10 @@ export function Experience() {
                     <Card className="glass-effect border-primary/20 card-3d group hover:border-primary/40 transition-all duration-300">
                       <CardContent className="p-8">
                         <div className="space-y-4">
-                          {/* Period and icon */}
                           <div className="flex items-center justify-between">
                             <Badge variant="outline" className="border-primary/30 text-primary bg-primary/10">
                               {exp.period}
                             </Badge>
-                            <div className="text-2xl">{exp.icon}</div>
                           </div>
 
                           {/* Title and company */}
