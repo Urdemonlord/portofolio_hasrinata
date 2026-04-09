@@ -1,15 +1,14 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
 import { Menu, X } from "lucide-react"
 
 const navItems = [
-  { name: "Tentang", href: "#about" },
-  { name: "Keahlian", href: "#skills" },
-  { name: "Pengalaman", href: "#experience" },
-  { name: "Proyek", href: "#projects" },
-  { name: "Kontak", href: "#contact" },
+  { name: "About", href: "#about" },
+  { name: "Skills", href: "#skills" },
+  { name: "Experience", href: "#experience" },
+  { name: "Projects", href: "#projects" },
+  { name: "Contact", href: "#contact" },
 ]
 
 export function Navigation() {
@@ -57,71 +56,87 @@ export function Navigation() {
     <>
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled ? "glass-effect border-b border-primary/20 shadow-lg" : "bg-transparent"
+          isScrolled ? "glass-nav shadow-lg" : "bg-transparent"
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
+            {/* Logo */}
             <button
               onClick={scrollToTop}
-              className="text-xl md:text-2xl font-bold bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent hover:scale-105 transition-transform duration-300"
+              className="text-lg md:text-xl font-bold text-[#dfe1f6] hover:scale-105 transition-transform duration-300 tracking-tight"
+              style={{ letterSpacing: "-0.02em" }}
             >
-              Hasrinata Arya Afendi
+              Hasrinata
             </button>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-1">
               {navItems.map((item) => (
-                <Button
+                <button
                   key={item.name}
-                  variant="ghost"
-                  size="sm"
                   onClick={() => scrollToSection(item.href)}
-                  className={`text-sm font-medium transition-all duration-300 hover:scale-105 ${
+                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 ${
                     activeSection === item.href.slice(1)
-                      ? "text-primary bg-primary/20 shadow-md"
-                      : "text-muted-foreground hover:text-foreground hover:bg-primary/10"
+                      ? "text-[#915EFF] bg-[#915EFF]/10"
+                      : "text-[#ccc3d7] hover:text-[#dfe1f6] hover:bg-white/5"
                   }`}
                 >
                   {item.name}
-                </Button>
+                </button>
               ))}
+              <a
+                href="mailto:hasrinata@gmail.com"
+                className="ml-3 px-5 py-2 text-sm font-medium rounded-lg gradient-purple text-white hover:opacity-90 transition-opacity duration-300"
+              >
+                Hire Me
+              </a>
             </div>
 
             {/* Mobile Menu Button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden glass-effect border border-primary/20"
+            <button
+              className="md:hidden glass-effect p-2 rounded-lg"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
-              {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </Button>
+              {isMobileMenuOpen ? (
+                <X className="h-5 w-5 text-[#dfe1f6]" />
+              ) : (
+                <Menu className="h-5 w-5 text-[#dfe1f6]" />
+              )}
+            </button>
           </div>
         </div>
       </nav>
 
+      {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-40 md:hidden">
-          <div className="fixed inset-0 bg-background/80 backdrop-blur-md" onClick={() => setIsMobileMenuOpen(false)} />
-          <div className="fixed top-20 right-4 left-4 glass-effect border border-primary/20 rounded-2xl p-6 shadow-2xl animate-fade-in-up">
-            <div className="space-y-4">
+          <div
+            className="fixed inset-0 bg-[#0f1321]/80 backdrop-blur-md"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+          <div className="fixed top-20 right-4 left-4 glass-card rounded-2xl p-6 shadow-2xl animate-fade-in-up">
+            <div className="space-y-2">
               {navItems.map((item, index) => (
-                <Button
+                <button
                   key={item.name}
-                  variant="ghost"
-                  size="lg"
                   onClick={() => scrollToSection(item.href)}
-                  className={`w-full justify-start text-lg font-medium transition-all duration-300 animate-fade-in-up ${
+                  className={`w-full text-left px-4 py-3 text-base font-medium rounded-xl transition-all duration-300 ${
                     activeSection === item.href.slice(1)
-                      ? "text-primary bg-primary/20"
-                      : "text-muted-foreground hover:text-foreground hover:bg-primary/10"
+                      ? "text-[#915EFF] bg-[#915EFF]/10"
+                      : "text-[#ccc3d7] hover:text-[#dfe1f6] hover:bg-white/5"
                   }`}
-                  style={{ animationDelay: `${index * 0.1}s` }}
+                  style={{ animationDelay: `${index * 0.05}s` }}
                 >
                   {item.name}
-                </Button>
+                </button>
               ))}
+              <a
+                href="mailto:hasrinata@gmail.com"
+                className="block text-center px-4 py-3 mt-4 text-sm font-medium rounded-xl gradient-purple text-white"
+              >
+                Hire Me
+              </a>
             </div>
           </div>
         </div>

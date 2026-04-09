@@ -1,8 +1,7 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { ArrowDown, Github, Linkedin, Mail } from "lucide-react"
 import { useEffect, useRef } from "react"
+import { Github, Linkedin, Mail, ChevronDown } from "lucide-react"
 
 export function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -10,7 +9,6 @@ export function Hero() {
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
-
     const ctx = canvas.getContext("2d")
     if (!ctx) return
 
@@ -18,224 +16,244 @@ export function Hero() {
     canvas.height = window.innerHeight
 
     const particles: Array<{
-      x: number
-      y: number
-      vx: number
-      vy: number
-      size: number
-      opacity: number
+      x: number; y: number; vx: number; vy: number; size: number; opacity: number
     }> = []
 
-    // Rainbow colors for particles
-    const colors = [
-      { r: 236, g: 72, b: 153 },   // Pink
-      { r: 139, g: 92, b: 246 },   // Purple
-      { r: 59, g: 130, b: 246 },   // Blue
-      { r: 16, g: 185, b: 129 },   // Green
-      { r: 245, g: 158, b: 11 },   // Orange
-    ]
-
-    // Create particles
-    for (let i = 0; i < 80; i++) {
-      const color = colors[Math.floor(Math.random() * colors.length)]
+    for (let i = 0; i < 60; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        size: Math.random() * 2 + 1,
-        opacity: Math.random() * 0.5 + 0.2,
-        color
-      } as any)
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        size: Math.random() * 1.5 + 0.5,
+        opacity: Math.random() * 0.4 + 0.1,
+      })
     }
 
+    let animId: number
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-      particles.forEach((particle: any) => {
-        particle.x += particle.vx
-        particle.y += particle.vy
-
-        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1
-        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1
+      particles.forEach((p) => {
+        p.x += p.vx
+        p.y += p.vy
+        if (p.x < 0 || p.x > canvas.width) p.vx *= -1
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1
 
         ctx.beginPath()
-        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
-        // Colorful particles
-        ctx.fillStyle = `rgba(${particle.color.r}, ${particle.color.g}, ${particle.color.b}, ${particle.opacity})`
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(145, 94, 255, ${p.opacity})`
         ctx.fill()
       })
 
-      // Draw connections
-      particles.forEach((p1: any, i) => {
-        particles.slice(i + 1).forEach((p2: any) => {
+      particles.forEach((p1, i) => {
+        particles.slice(i + 1).forEach((p2) => {
           const dx = p1.x - p2.x
           const dy = p1.y - p2.y
-          const distance = Math.sqrt(dx * dx + dy * dy)
-
-          if (distance < 150) {
+          const dist = Math.sqrt(dx * dx + dy * dy)
+          if (dist < 120) {
             ctx.beginPath()
             ctx.moveTo(p1.x, p1.y)
             ctx.lineTo(p2.x, p2.y)
-            // Mix colors for connections
-            const avgR = (p1.color.r + p2.color.r) / 2
-            const avgG = (p1.color.g + p2.color.g) / 2
-            const avgB = (p1.color.b + p2.color.b) / 2
-            ctx.strokeStyle = `rgba(${avgR}, ${avgG}, ${avgB}, ${0.15 * (1 - distance / 150)})`
+            ctx.strokeStyle = `rgba(145, 94, 255, ${0.08 * (1 - dist / 120)})`
+            ctx.lineWidth = 0.5
             ctx.stroke()
           }
         })
       })
 
-      requestAnimationFrame(animate)
+      animId = requestAnimationFrame(animate)
     }
-
     animate()
 
     const handleResize = () => {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
     }
-
     window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
+    return () => {
+      window.removeEventListener("resize", handleResize)
+      cancelAnimationFrame(animId)
+    }
   }, [])
 
-  const scrollToProjects = () => {
-    const element = document.getElementById("projects")
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
-    }
+  const scrollToAbout = () => {
+    document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })
   }
 
   return (
-    <section className="min-h-screen flex items-center justify-center px-6 pt-20 relative overflow-hidden">
-      <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none opacity-40" />
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Particle Canvas */}
+      <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" />
 
-      {/* Cyberpunk Grid Background */}
-      <div className="absolute inset-0 cyber-grid opacity-10"></div>
-
-      {/* Glowing Orbs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 -left-20 w-96 h-96 bg-primary/20 rounded-full blur-3xl floating-animation"></div>
+      {/* Background Glow Orbs */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div
-          className="absolute bottom-1/4 -right-20 w-96 h-96 bg-accent/15 rounded-full blur-3xl floating-animation"
-          style={{ animationDelay: "3s" }}
-        ></div>
+          className="absolute top-1/4 -left-32 w-[600px] h-[600px] rounded-full floating-animation"
+          style={{
+            background: "radial-gradient(circle, rgba(145, 94, 255, 0.12) 0%, transparent 70%)",
+          }}
+        />
         <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary/10 rounded-full blur-2xl floating-animation"
-          style={{ animationDelay: "1.5s" }}
-        ></div>
+          className="absolute bottom-1/4 -right-32 w-[500px] h-[500px] rounded-full floating-animation"
+          style={{
+            background: "radial-gradient(circle, rgba(79, 70, 229, 0.1) 0%, transparent 70%)",
+            animationDelay: "3s",
+          }}
+        />
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full"
+          style={{
+            background: "radial-gradient(circle, rgba(145, 94, 255, 0.04) 0%, transparent 60%)",
+          }}
+        />
       </div>
 
-      <div className="max-w-6xl mx-auto relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+      {/* Subtle Grid */}
+      <div className="absolute inset-0 cyber-grid pointer-events-none" />
+
+      {/* Content */}
+      <div className="relative z-10 max-w-6xl mx-auto px-6 pt-20">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          {/* Left: Text */}
           <div className="space-y-8 animate-fade-in-up">
-            <div className="space-y-6">
-              <p className="text-muted-foreground text-lg uppercase tracking-wider">Hasrinata Arya Afendi</p>
-              <h1 className="text-5xl md:text-7xl font-bold text-foreground leading-tight relative">
-                <span className="relative inline-block">
-                  Full-Stack Developer
-                  <div className="absolute -inset-1 bg-primary/20 blur-xl rounded-lg -z-10"></div>
-                </span>
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-xs font-medium tracking-widest uppercase text-[#915EFF]">
+              <span className="w-2 h-2 rounded-full bg-[#915EFF] animate-pulse" />
+              Available for New Projects
+            </div>
+
+            {/* Heading */}
+            <div className="space-y-3">
+              <p className="text-[#ccc3d7] text-base tracking-wider uppercase">
+                Hasrinata Arya Afendi
+              </p>
+              <h1
+                className="text-5xl md:text-7xl font-bold text-[#dfe1f6] leading-tight"
+                style={{ letterSpacing: "-0.04em" }}
+              >
+                Hi, I&apos;m{" "}
+                <span className="gradient-text-purple">Hasrinata</span>
               </h1>
-              <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-2xl">
-                Mengembangkan aplikasi web dan mobile dengan fokus pada solusi praktis untuk kebutuhan lokal
+              <p className="text-2xl md:text-3xl font-semibold text-[#dfe1f6]" style={{ letterSpacing: "-0.02em" }}>
+                AI Engineer &amp; Full-Stack Developer
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-start gap-6 pt-4">
-              <Button
-                onClick={scrollToProjects}
-                size="lg"
-                className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 text-base font-medium neon-border group"
+            {/* Description */}
+            <p className="text-lg text-[#ccc3d7] leading-relaxed max-w-xl">
+              Mahasiswa Informatika yang membangun aplikasi web, mobile, dan solusi AI. Founder MeowLabs — digital agency untuk kebutuhan lokal Indonesia.
+            </p>
+
+            {/* CTA */}
+            <div className="flex flex-wrap items-center gap-4 pt-2">
+              <button
+                onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })}
+                className="px-8 py-3.5 rounded-xl gradient-purple text-white font-semibold text-sm tracking-wide hover:opacity-90 transition-all duration-300 hover:scale-105"
+                style={{ boxShadow: "0 8px 30px rgba(145, 94, 255, 0.3)" }}
               >
                 View My Work
-                <ArrowDown className="ml-2 h-5 w-5 group-hover:translate-y-1 transition-transform" />
-              </Button>
+              </button>
+              <a
+                href="mailto:hasrinata@gmail.com"
+                className="px-8 py-3.5 rounded-xl text-sm font-semibold text-[#dfe1f6] border border-[#4a4455] hover:border-[#915EFF]/50 hover:bg-[#915EFF]/5 transition-all duration-300"
+              >
+                Get In Touch
+              </a>
+            </div>
 
-              <div className="flex items-center gap-4">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="border-primary/30 hover:border-primary hover:bg-primary/10 transition-all duration-300 hover:scale-110 bg-transparent"
-                  onClick={() => window.open('https://github.com/Urdemonlord', '_blank')}
+            {/* Social Icons */}
+            <div className="flex items-center gap-3 pt-2">
+              {[
+                { icon: Github, href: "https://github.com/Urdemonlord", label: "GitHub" },
+                { icon: Linkedin, href: "https://linkedin.com/in/hasrinata", label: "LinkedIn" },
+                { icon: Mail, href: "mailto:hasrinata@gmail.com", label: "Email" },
+              ].map(({ icon: Icon, href, label }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target={href.startsWith("http") ? "_blank" : undefined}
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="w-10 h-10 glass-card rounded-xl flex items-center justify-center text-[#ccc3d7] hover:text-[#915EFF] hover:border-[#915EFF]/30 transition-all duration-300 hover:scale-110"
                 >
-                  <Github className="h-5 w-5" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="border-primary/30 hover:border-primary hover:bg-primary/10 transition-all duration-300 hover:scale-110 bg-transparent"
-                  onClick={() => window.open('https://linkedin.com/in/hasrinata', '_blank')}
-                >
-                  <Linkedin className="h-5 w-5" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="border-primary/30 hover:border-primary hover:bg-primary/10 transition-all duration-300 hover:scale-110 bg-transparent"
-                  onClick={() => window.location.href = 'mailto:hasrinata@gmail.com'}
-                >
-                  <Mail className="h-5 w-5" />
-                </Button>
-              </div>
+                  <Icon className="h-4 w-4" />
+                </a>
+              ))}
             </div>
           </div>
 
-          {/* 3D Visual Element */}
-          <div className="relative animate-fade-in-up hidden lg:block" style={{ animationDelay: "0.3s" }}>
-            <div className="relative w-full h-96">
-              {/* Main 3D Card */}
-              <div className="absolute inset-0 card-3d group">
-                <div className="w-full h-full bg-gradient-to-br from-card via-card/50 to-background rounded-2xl border-2 border-primary/30 neon-border flex items-center justify-center overflow-hidden">
-                  {/* Code Animation Background */}
-                  <div className="absolute inset-0 opacity-10 text-xs text-primary font-mono overflow-hidden">
-                    <div className="animate-slide-in-left">
-                      {[...Array(10)].map((_, i) => (
-                        <div key={i} className="whitespace-nowrap">
-                          {`const dev = { name: "Hasrinata", skills: ["React", "Node", "AI"] }; `}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+          {/* Right: Code Card */}
+          <div
+            className="hidden lg:block animate-fade-in-up"
+            style={{ animationDelay: "0.3s" }}
+          >
+            <div className="relative">
+              {/* Main Terminal Card */}
+              <div className="glass-card rounded-2xl p-6 glow-purple">
+                {/* Terminal Header */}
+                <div className="flex items-center gap-2 mb-5">
+                  <div className="w-3 h-3 rounded-full bg-red-500/70" />
+                  <div className="w-3 h-3 rounded-full bg-yellow-500/70" />
+                  <div className="w-3 h-3 rounded-full bg-green-500/70" />
+                  <span className="ml-2 text-xs text-[#ccc3d7] font-mono">hasrinata.config.ts</span>
+                </div>
 
-                  {/* Center Icon */}
-                  <div className="relative z-10">
-                    <div className="w-32 h-32 rounded-2xl bg-primary/20 border-2 border-primary/30 flex items-center justify-center text-6xl font-bold text-primary floating-animation">
-                      &lt;/&gt;
-                    </div>
+                {/* Code Content */}
+                <div className="font-mono text-sm space-y-1 text-[#ccc3d7]">
+                  <p><span className="text-[#4F46E5]">const</span> <span className="text-[#dfe1f6]">dev</span> = {"{"}</p>
+                  <p className="pl-4"><span className="text-[#915EFF]">name</span>: <span className="text-green-400">&quot;Hasrinata Arya Afendi&quot;</span>,</p>
+                  <p className="pl-4"><span className="text-[#915EFF]">role</span>: <span className="text-green-400">&quot;AI Engineer &amp; Full-Stack Dev&quot;</span>,</p>
+                  <p className="pl-4"><span className="text-[#915EFF]">stack</span>: [</p>
+                  <p className="pl-8"><span className="text-green-400">&quot;Next.js&quot;</span>, <span className="text-green-400">&quot;Python&quot;</span>, <span className="text-green-400">&quot;TensorFlow&quot;</span>,</p>
+                  <p className="pl-8"><span className="text-green-400">&quot;Supabase&quot;</span>, <span className="text-green-400">&quot;ESP32&quot;</span></p>
+                  <p className="pl-4">],</p>
+                  <p className="pl-4"><span className="text-[#915EFF]">company</span>: <span className="text-green-400">&quot;MeowLabs&quot;</span>,</p>
+                  <p className="pl-4"><span className="text-[#915EFF]">location</span>: <span className="text-green-400">&quot;Semarang, Indonesia&quot;</span>,</p>
+                  <p className="pl-4"><span className="text-[#915EFF]">available</span>: <span className="text-[#4F46E5]">true</span>,</p>
+                  <p>{"}"}</p>
+                  <div className="mt-3 flex items-center gap-1">
+                    <span className="text-[#915EFF]">$</span>
+                    <span className="text-[#dfe1f6]"> npm run build-something-awesome</span>
+                    <span className="w-0.5 h-4 bg-[#915EFF] animate-pulse ml-1" />
                   </div>
                 </div>
               </div>
 
-              {/* Floating Tech Icons */}
+              {/* Floating badge - status */}
               <div
-                className="absolute -top-8 -right-8 w-20 h-20 bg-primary/20 rounded-2xl flex items-center justify-center glass-effect floating-animation neon-border rotate-12"
+                className="absolute -top-4 -right-4 glass-card rounded-2xl px-4 py-3 floating-animation"
                 style={{ animationDelay: "1s" }}
               >
-                <span className="text-lg font-bold text-primary">JS</span>
+                <p className="text-xs text-[#ccc3d7] uppercase tracking-wider">Experience</p>
+                <p className="text-2xl font-bold gradient-text-purple">3+</p>
+                <p className="text-xs text-[#ccc3d7]">Years</p>
               </div>
+
+              {/* Floating badge - projects */}
               <div
-                className="absolute -bottom-8 -left-8 w-20 h-20 bg-accent/20 rounded-2xl flex items-center justify-center glass-effect floating-animation neon-border -rotate-12"
+                className="absolute -bottom-4 -left-4 glass-card rounded-2xl px-4 py-3 floating-animation"
                 style={{ animationDelay: "2s" }}
               >
-                <span className="text-lg font-bold text-primary">AI</span>
-              </div>
-              <div
-                className="absolute top-1/2 -left-12 w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center glass-effect floating-animation neon-border rotate-45"
-                style={{ animationDelay: "0.5s" }}
-              >
-                <span className="text-sm font-bold text-primary">DB</span>
-              </div>
-              <div
-                className="absolute top-1/4 -right-12 w-16 h-16 bg-accent/20 rounded-2xl flex items-center justify-center glass-effect floating-animation neon-border -rotate-45"
-                style={{ animationDelay: "1.5s" }}
-              >
-                <span className="text-sm font-bold text-primary">IoT</span>
+                <p className="text-xs text-[#ccc3d7] uppercase tracking-wider">Projects</p>
+                <p className="text-2xl font-bold gradient-text-purple">20+</p>
+                <p className="text-xs text-[#ccc3d7]">Completed</p>
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div className="flex flex-col items-center mt-20 pb-8">
+          <button
+            onClick={scrollToAbout}
+            className="flex flex-col items-center gap-2 text-[#ccc3d7] hover:text-[#915EFF] transition-colors duration-300 group"
+          >
+            <span className="text-xs uppercase tracking-widest">Scroll Down</span>
+            <ChevronDown
+              className="h-5 w-5"
+              style={{ animation: "scrollBounce 1.5s ease-in-out infinite" }}
+            />
+          </button>
         </div>
       </div>
     </section>

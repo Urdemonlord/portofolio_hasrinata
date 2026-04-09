@@ -1,95 +1,98 @@
 "use client"
 
-import { Badge } from "@/components/ui/badge"
-import { Card } from "@/components/ui/card"
-
 const skillCategories = [
-  {
-    title: "Mobile Development",
-    skills: ["Flutter", "React Native", "Kotlin", "Android", "iOS"],
-    color: "from-blue-500/20 to-cyan-500/20"
-  },
   {
     title: "Frontend",
     skills: ["React", "Next.js", "TypeScript", "JavaScript", "HTML5", "CSS3", "Tailwind"],
-    color: "from-purple-500/20 to-pink-500/20"
+    accent: "#915EFF",
   },
   {
     title: "Backend",
-    skills: ["Node.js", "Express", "NestJS", "Laravel", "PHP", ".NET", "Python", "FastAPI"],
-    color: "from-green-500/20 to-emerald-500/20"
-  },
-  {
-    title: "Database",
-    skills: ["MongoDB", "MySQL", "PostgreSQL", "Firebase", "Redis", "Supabase"],
-    color: "from-orange-500/20 to-red-500/20"
+    skills: ["Node.js", "Express", "Python", "FastAPI", "PHP", "Laravel"],
+    accent: "#4F46E5",
   },
   {
     title: "AI & ML",
-    skills: ["TensorFlow", "PyTorch", "OpenCV", "scikit-learn", "YOLO", "NLP"],
-    color: "from-cyan-500/20 to-blue-500/20"
+    skills: ["TensorFlow", "PyTorch", "OpenCV", "scikit-learn", "YOLO", "IndoBERT", "NLP"],
+    accent: "#915EFF",
   },
   {
-    title: "DevOps",
-    skills: ["Git", "Docker", "CI/CD", "AWS", "Vercel", "Linux", "Nginx"],
-    color: "from-yellow-500/20 to-orange-500/20"
+    title: "Database",
+    skills: ["PostgreSQL", "MySQL", "MongoDB", "Supabase", "Firebase", "Redis"],
+    accent: "#4F46E5",
+  },
+  {
+    title: "Mobile",
+    skills: ["React Native", "Expo", "Android", "iOS"],
+    accent: "#915EFF",
+  },
+  {
+    title: "IoT & Hardware",
+    skills: ["Arduino", "ESP32", "Raspberry Pi", "MQTT", "TinyML", "WebSockets"],
+    accent: "#4F46E5",
+  },
+  {
+    title: "DevOps & Tools",
+    skills: ["Git", "Docker", "CI/CD", "Vercel", "Google Cloud", "Linux", "Nginx"],
+    accent: "#915EFF",
   },
   {
     title: "Design",
-    skills: ["Figma", "Adobe XD", "Photoshop", "Illustrator", "Blender"],
-    color: "from-pink-500/20 to-rose-500/20"
-  },
-  {
-    title: "IoT",
-    skills: ["Arduino", "ESP32", "Raspberry Pi", "MQTT", "WebSockets"],
-    color: "from-indigo-500/20 to-purple-500/20"
+    skills: ["Figma", "Adobe XD", "Photoshop", "Blender"],
+    accent: "#4F46E5",
   },
 ]
 
 export function Skills() {
   return (
-    <section id="skills" className="py-20 px-6 relative overflow-hidden">
-      {/* Cyberpunk Grid Background */}
-      <div className="absolute inset-0 cyber-grid opacity-20"></div>
+    <section id="skills" className="py-32 px-6 relative overflow-hidden">
+      {/* Subtle background */}
+      <div className="absolute inset-0 cyber-grid opacity-50 pointer-events-none" />
 
       <div className="max-w-6xl mx-auto relative z-10">
-        <div className="space-y-12">
-          <div className="space-y-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground">Keahlian Teknis</h2>
-            <div className="w-20 h-1 bg-primary rounded-full neon-border"></div>
-          </div>
+        {/* Section Header */}
+        <div className="space-y-4 mb-20 animate-fade-in-up">
+          <p className="text-sm uppercase tracking-[0.2em] text-[#915EFF] font-medium">
+            Technical Skills
+          </p>
+          <h2
+            className="text-4xl md:text-5xl font-bold text-[#dfe1f6]"
+            style={{ letterSpacing: "-0.03em" }}
+          >
+            What I work with.
+          </h2>
+          <div className="w-16 h-0.5 gradient-purple rounded-full" />
+        </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {skillCategories.map((category, index) => (
-              <Card
-                key={index}
-                className="p-6 space-y-4 bg-card border-primary/20 hover:border-primary/50 transition-all duration-300 card-3d group relative overflow-hidden"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                {/* Gradient Background */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
+        {/* Skills Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+          {skillCategories.map((category, index) => (
+            <div
+              key={index}
+              className="glass-card rounded-2xl p-6 card-3d group glow-purple-hover animate-fade-in-up"
+              style={{ animationDelay: `${index * 0.05}s` }}
+            >
+              {/* Category accent dot */}
+              <div className="flex items-center gap-3 mb-5">
+                <div
+                  className="w-2 h-2 rounded-full"
+                  style={{ backgroundColor: category.accent }}
+                />
+                <h3 className="text-sm font-bold text-[#dfe1f6] uppercase tracking-widest group-hover:text-[#915EFF] transition-colors duration-300">
+                  {category.title}
+                </h3>
+              </div>
 
-                <div className="relative z-10">
-                  <div className="mb-4">
-                    <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">
-                      {category.title}
-                    </h3>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {category.skills.map((skill, skillIndex) => (
-                      <Badge
-                        key={skillIndex}
-                        variant="secondary"
-                        className="text-xs bg-primary/10 text-primary hover:bg-primary/20 border-primary/30 transition-colors"
-                      >
-                        {skill}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
+              {/* Skills */}
+              <div className="flex flex-wrap gap-2">
+                {category.skills.map((skill, si) => (
+                  <span key={si} className="tech-chip">
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
