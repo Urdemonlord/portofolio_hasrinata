@@ -19,6 +19,7 @@ export function Projects() {
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({})
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -96,11 +97,12 @@ export function Projects() {
               >
                 {/* Project Image */}
                 <div className="relative h-48 overflow-hidden">
-                  {project.image ? (
+                  {project.image && !imgErrors[project.id] ? (
                     <img
                       src={project.image}
                       alt={project.title}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      onError={() => setImgErrors(prev => ({ ...prev, [project.id]: true }))}
                     />
                   ) : (
                     <div
